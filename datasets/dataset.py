@@ -1,10 +1,13 @@
+import os
+
 import numpy as np
 import pandas as pd
 from sklearn.preprocessing import LabelEncoder, OneHotEncoder
 from torch.utils.data import Dataset
 
+
 class Preprocessor:
-    def __init__(self, ds_name, seed=42, task='anomaly',
+    def __init__(self, ds_name, data_dir, seed=42, task='anomaly',
                  scaling_type='standard', cat_encoding='int'):
         assert task == 'anomaly', "Only 'anomaly' task is supported."
         np.random.seed(seed)
@@ -13,7 +16,7 @@ class Preprocessor:
         self.scaling_type = scaling_type
         self.cat_encoding = cat_encoding
 
-        self.data = pd.read_csv(f'./data/{ds_name}.csv')
+        self.data = pd.read_csv(os.path.join(data_dir, f'{ds_name}.csv'))
         self.X = self.data.drop(columns=['label', 'prompt'], errors='ignore')
         self.y = np.array(self.data['label'], dtype=int)
 
@@ -54,11 +57,16 @@ class Preprocessor:
         # --- 6. Scaling Params ---
         self.scaling_params = self._compute_scaling_stats()
 
-        return (
-            self.cat_dims, self.cat_idxs, self.con_idxs,
-            X_train, y_train, X_test, y_test,
-            self.scaling_params
-        )
+        return {
+            'cat_dims': self.cat_dims,
+            'cat_idxs': self.cat_idxs,
+            'con_idxs': self.con_idxs,
+            'X_train': X_train,
+            'y_train': y_train,
+            'X_test': X_test,
+            'y_test': y_test,
+            'scaling_params': self.scaling_params
+        }
     
     def _encode_onehot(self):
         ohe = OneHotEncoder(sparse=False, handle_unknown='ignore')
@@ -134,12 +142,12 @@ class TabularADDataset(Dataset):
     """
     A PyTorch Dataset for Tabular Anomaly Detection with both categorical and continuous features.
 
-    Parameters:
-    - X (dict): A dictionary with keys 'data' and 'mask' (numpy arrays).
-    - Y (dict): A dictionary with key 'data' (numpy array).
-    - cat_cols (list[int]): List of column indices for categorical features.
-    - task (str): Task type, 'clf' or 'reg'.
-    - scaling_stats (dict, optional): Dictionary of scaling parameters, must include 'type'.
+    Args:
+        X (dict): Dictionary with keys 'data' and 'mask' (numpy arrays).
+        Y (dict): Dictionary with key 'data' (numpy array).
+        cat_cols (list[int]): List of column indices for categorical features.
+        task (str): Task type, 'clf' or 'reg'.
+        scaling_stats (dict, optional): Dictionary of scaling parameters, must include 'type'.
     """
 
     def __init__(self, X, Y, cat_cols, task='clf', scaling_stats=None):
@@ -149,18 +157,18 @@ class TabularADDataset(Dataset):
         cat_cols = list(cat_cols)
         con_cols = list(set(range(n_features)) - set(cat_cols))
 
-        # Split features
-        self.cat_data = X_data[:, cat_cols].astype(np.int64)       # Categorical
-        self.con_data = X_data[:, con_cols].astype(np.float32)     # Continuous
-        self.cat_mask = X_mask[:, cat_cols].astype(np.int64)
-        self.con_mask = X_mask[:, con_cols].astype(np.int64)
+        # Split features into categorical and continuous
+        self.cat_data = X_data[:, cat_cols].astype(np.int64)       # Categorical features
+        self.con_data = X_data[:, con_cols].astype(np.float32)     # Continuous features
+        self.cat_mask = X_mask[:, cat_cols].astype(np.int64)       # Categorical mask
+        self.con_mask = X_mask[:, con_cols].astype(np.int64)       # Continuous mask
 
         # Labels
         self.y = Y['data'] if task == 'clf' else Y['data'].astype(np.float32)
-        self.cls = np.zeros_like(self.y, dtype=int)
-        self.cls_mask = np.ones_like(self.y, dtype=int)
+        self.cls = np.zeros_like(self.y, dtype=int)                # Dummy class for compatibility
+        self.cls_mask = np.ones_like(self.y, dtype=int)            # Dummy mask for compatibility
 
-        # Scaling
+        # Apply scaling if provided
         if scaling_stats is not None:
             self._apply_scaling(self.con_data, scaling_stats)
 
@@ -177,7 +185,22 @@ class TabularADDataset(Dataset):
         return len(self.y)
 
     def __getitem__(self, idx):
-        # Return: (cat_features), con_features, label, cat_mask, con_mask
+        """
+        Returns: 
+        a dictionary with all relevant features and masks
+            cat_features: 1D numpy array of categorical features for this sample (including dummy class)
+            con_features: 1D numpy array of continuous features for this sample
+            label:        The label for this sample (int or float)
+            cat_mask:     1D numpy array mask for categorical features (1 if not missing, 0 if missing)
+            con_mask:     1D numpy array mask for continuous features (1 if not missing, 0 if missing)  
+        """
         cat_feat = np.concatenate((self.cls[idx], self.cat_data[idx]))
         cat_msk = np.concatenate((self.cls_mask[idx], self.cat_mask[idx]))
-        return cat_feat, self.con_data[idx], self.y[idx], cat_msk, self.con_mask[idx]
+        
+        return {
+            'cat_features': cat_feat,
+            'con_features': self.con_data[idx],
+            'label': self.y[idx],
+            'cat_mask': cat_msk,
+            'con_mask': self.con_mask[idx]
+        }
