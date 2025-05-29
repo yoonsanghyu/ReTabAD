@@ -55,19 +55,13 @@ class Preprocessor:
 
         self.cat_idxs, self.con_idxs = self._compute_feature_indices()
 
-        # --- 6. Scaling Params ---
         self.scaling_params = self._compute_scaling_stats()
 
-        return {
-            'cat_dims': self.cat_dims,
-            'cat_idxs': self.cat_idxs,
-            'con_idxs': self.con_idxs,
-            'X_train': X_train,
-            'y_train': y_train,
-            'X_test': X_test,
-            'y_test': y_test,
-            'scaling_params': self.scaling_params
-        }
+        train_dict = self._make_dataset(self.X_train, self.y_train)
+        test_dict = self._make_dataset(self.X_test, self.y_test)
+
+        return train_dict, test_dict
+
     
     def _encode_onehot(self):
         ohe = OneHotEncoder(sparse=False, handle_unknown='ignore')
@@ -157,72 +151,55 @@ class Preprocessor:
         else:
             raise NotImplementedError(f"Unsupported scaling_type: {self.scaling_type}")
 
+    def _make_dataset(self, X, y):
+        X_data, X_mask = X['data'], X['mask']
+        y = y['data']
+        con_data = X_data[:, self.con_idxs].astype(np.float32)
+        con_mask = X_mask[:, self.con_idxs].astype(np.int64)
+        cat_data = X_data[:, self.cat_idxs].astype(np.int64) if self.cat_idxs else None
+        cat_mask = X_mask[:, self.cat_idxs].astype(np.int64) if self.cat_idxs else None
+
+        if self.scaling_params['type'] == 'standard':
+            con_data = (con_data - self.scaling_params['mean']) / self.scaling_params['std']
+        elif self.scaling_params['type'] == 'minmax':
+            con_data = (con_data - self.scaling_params['min']) / self.scaling_params['range']
+
+        # Add dummy cls token to categorical features
+        cls_token = np.zeros((y.shape[0], 1), dtype=np.int64)
+        cls_mask = np.ones((y.shape[0], 1), dtype=np.int64)
+
+        if cat_data is not None:
+            cat_data = np.concatenate([cls_token, cat_data], axis=1)
+            cat_mask = np.concatenate([cls_mask, cat_mask], axis=1)
+        else:
+            cat_data = cls_token
+            cat_mask = cls_mask
+
+        return {
+            'X_cat_data': cat_data,
+            'X_cat_mask': cat_mask,
+            'X_cont_data': con_data,
+            'X_cont_mask': con_mask,
+            'y': y
+        }
+
 
 class TabularADDataset(Dataset):
-    """
-    A PyTorch Dataset for Tabular Anomaly Detection with both categorical and continuous features.
-
-    Args:
-        X (dict): Dictionary with keys 'data' and 'mask' (numpy arrays).
-        Y (dict): Dictionary with key 'data' (numpy array).
-        cat_cols (list[int]): List of column indices for categorical features.
-        task (str): Task type, 'clf' or 'reg'.
-        scaling_stats (dict, optional): Dictionary of scaling parameters, must include 'type'.
-    """
-
-    def __init__(self, X, Y, cat_cols, task='clf', scaling_stats=None):
-        X_data, X_mask = X['data'], X['mask']
-        n_features = X_data.shape[1]
-
-        cat_cols = list(cat_cols)
-        con_cols = list(set(range(n_features)) - set(cat_cols))
-
-        # Split features into categorical and continuous
-        self.cat_data = X_data[:, cat_cols].astype(np.int64)       # Categorical features
-        self.con_data = X_data[:, con_cols].astype(np.float32)     # Continuous features
-        self.cat_mask = X_mask[:, cat_cols].astype(np.int64)       # Categorical mask
-        self.con_mask = X_mask[:, con_cols].astype(np.int64)       # Continuous mask
-
-        # Labels
-        self.y = Y['data'] if task == 'clf' else Y['data'].astype(np.float32)
-        self.cls = np.zeros_like(self.y, dtype=int)                # Dummy class for compatibility
-        self.cls_mask = np.ones_like(self.y, dtype=int)            # Dummy mask for compatibility
-
-        # Apply scaling if provided
-        if scaling_stats is not None:
-            self._apply_scaling(self.con_data, scaling_stats)
-
-    def _apply_scaling(self, con_data, scaling_stats):
-        s_type = scaling_stats['type']
-        if s_type == 'standard':
-            con_data[:] = (con_data - scaling_stats['mean']) / scaling_stats['std']
-        elif s_type == 'minmax':
-            con_data[:] = (con_data - scaling_stats['min']) / scaling_stats['range']
-        elif s_type == 'none':
-            pass
-        else:
-            raise NotImplementedError(f"Unknown scaling type: {s_type}")
+    def __init__(self, X_cat_data, X_cat_mask, X_cont_data, X_cont_mask, y):
+        self.X_cat_data = X_cat_data
+        self.X_cat_mask = X_cat_mask
+        self.X_cont_data = X_cont_data
+        self.X_cont_mask = X_cont_mask
+        self.y = y
 
     def __len__(self):
         return len(self.y)
 
     def __getitem__(self, idx):
-        """
-        Returns: 
-        a dictionary with all relevant features and masks
-            cat_features: 1D numpy array of categorical features for this sample (including dummy class)
-            con_features: 1D numpy array of continuous features for this sample
-            label:        The label for this sample (int or float)
-            cat_mask:     1D numpy array mask for categorical features (1 if not missing, 0 if missing)
-            con_mask:     1D numpy array mask for continuous features (1 if not missing, 0 if missing)  
-        """
-        cat_feat = np.concatenate((self.cls[idx], self.cat_data[idx]))
-        cat_msk = np.concatenate((self.cls_mask[idx], self.cat_mask[idx]))
-        
         return {
-            'cat_features': cat_feat,
-            'con_features': self.con_data[idx],
-            'label': self.y[idx],
-            'cat_mask': cat_msk,
-            'con_mask': self.con_mask[idx]
+            'cat_features': self.X_cat_data[idx],
+            'cat_mask': self.X_cat_mask[idx],
+            'cont_features': self.X_cont_data[idx],
+            'cont_mask': self.X_cont_mask[idx],
+            'label': self.y[idx]
         }

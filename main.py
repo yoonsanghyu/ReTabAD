@@ -6,11 +6,8 @@ import argparse
 from dotenv import load_dotenv
 import pandas as pd
 import numpy as np
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import LabelEncoder, OrdinalEncoder
 from sklearn.metrics import classification_report
 from sklearn.metrics import roc_auc_score, average_precision_score
-from sklearn.preprocessing import StandardScaler, MinMaxScaler
 
 from pyod.models.iforest import IForest
 from pyod.models.knn import KNN
@@ -29,7 +26,7 @@ DATA_DIR = os.getenv("DATA_DIR")
 
 # Argument parsing
 parser = argparse.ArgumentParser(description="Run anomaly detection pipeline.")
-parser.add_argument('--data_name', type=str, default='cover', help='Name of the dataset (CSV file without extension)')
+parser.add_argument('--data_name', type=str, default='hepatitis', help='Name of the dataset (CSV file without extension)')
 parser.add_argument('--preprocess', type=str, choices=['standard', 'minmax', None], default='standard', help='Preprocessing method: standard or minmax')
 parser.add_argument('--model_name', type=str, choices=['IForest', 'KNN', 'LOF', 'OCSVM', 'PCA'], default='IForest', help='Model to use: iforest')
 parser.add_argument('--random_state', type=int, default=0, help='Random state for train-test split')
@@ -38,16 +35,18 @@ parser.add_argument('--cat_encoding', type=str, choices=['int', 'onehot', 'int_e
 args = parser.parse_args()
 
 # load data using Preprocessor
-cat_encoding = args.cat_encoding  # Get from parser argument
-preprocessor = Preprocessor(ds_name=args.data_name, data_dir=DATA_DIR, scaling_type=args.preprocess, cat_encoding=args.cat_encoding)
-data_dict = preprocessor.prepare_data()
+preprocessor = Preprocessor(ds_name=args.data_name, 
+                            data_dir=DATA_DIR, 
+                            scaling_type=args.preprocess, 
+                            cat_encoding=args.cat_encoding)
+train_dict, test_dict = preprocessor.prepare_data()
 
-# X_train, X_test are dicts with 'data' and 'mask', y_train, y_test are dicts with 'data'
-X_train = data_dict['X_train']['data']
-y_train = data_dict['y_train']['data']
-X_test = data_dict['X_test']['data']
-y_test = data_dict['y_test']['data']
-
+X_train_cat, X_train_cont, y_train = (
+    train_dict['X_cat_data'], train_dict['X_cont_data'], train_dict['y']
+)
+X_test_cat, X_test_cont, y_test = (
+    test_dict['X_cat_data'], test_dict['X_cont_data'], test_dict['y']
+)
 # train model
 MODELS = {
     "IForest": IForest(),
@@ -57,8 +56,8 @@ MODELS = {
     "PCA": PCA(),
 }
 clf = MODELS[args.model_name]
-clf.fit(X_train)
-y_pred = clf.decision_function(X_test)
+clf.fit(X_train_cont)
+y_pred = clf.decision_function(X_test_cont)
 
 # evaluate model
 auroc = roc_auc_score(y_test, y_pred)
