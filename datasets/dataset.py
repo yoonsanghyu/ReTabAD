@@ -22,6 +22,7 @@ class Preprocessor:
 
         self.categorical_columns = self.X.select_dtypes(include=['object', 'category']).columns.tolist()
         self.continuous_columns = [col for col in self.X.columns if col not in self.categorical_columns]
+        self.org_continuous_columns = self.continuous_columns.copy()
         self.cat_dims = []
 
     def prepare_data(self):
@@ -112,27 +113,46 @@ class Preprocessor:
             return cat_idxs, con_idxs
 
     def _compute_scaling_stats(self):
-        data = self.X_train['data']
+        # Only continuous value
+        data = self.X_train['data'][:,self.con_idxs]
+        n_features = data.shape[1]
+
+        if self.scaling_type is None:
+            return {'type': 'none'}
+        
         if self.cat_encoding == 'onehot':
-            normalize_mask = np.zeros(data.shape[1], dtype=bool)
-            for col in self.continuous_columns:
+            normalize_mask = np.zeros(n_features, dtype=bool)
+            for col in self.org_continuous_columns:
                 if col in self.X.columns:
-                    normalize_mask[self.X.columns.get_loc(col)] = True
-            sub_data = data[:, normalize_mask]
+                    idx = self.X.columns.get_loc(col)
+                    normalize_mask[idx] = True
         else:
-            sub_data = data[:, self.con_idxs]
+            normalize_mask = np.ones(n_features, dtype=bool)
+
+        sub_data = data[:, normalize_mask]
 
         if self.scaling_type == 'minmax':
             d_min = sub_data.min(0)
             d_max = sub_data.max(0)
-            d_range = np.where(d_max - d_min < 1e-6, 1e-6, d_max - d_min)
-            return {'type': 'minmax', 'min': d_min, 'range': d_range}
+            d_range = d_max - d_min
+
+            full_min = np.zeros(n_features, dtype=np.float32)
+            full_range = np.ones(n_features, dtype=np.float32)
+            full_min[normalize_mask] = d_min
+            full_range[normalize_mask] = d_range
+
+            return {'type': 'minmax', 'min': full_min, 'range': full_range}
 
         elif self.scaling_type == 'standard':
             mean = sub_data.mean(0)
             std = sub_data.std(0)
-            std = np.where(std < 1e-6, 1e-6, std)
-            return {'type': 'standard', 'mean': mean, 'std': std}
+
+            full_mean = np.zeros(n_features, dtype=np.float32)
+            full_std = np.ones(n_features, dtype=np.float32)
+            full_mean[normalize_mask] = mean
+            full_std[normalize_mask] = std
+
+            return {'type': 'standard', 'mean': full_mean, 'std': full_std}
 
         else:
             raise NotImplementedError(f"Unsupported scaling_type: {self.scaling_type}")
@@ -178,6 +198,8 @@ class TabularADDataset(Dataset):
             con_data[:] = (con_data - scaling_stats['mean']) / scaling_stats['std']
         elif s_type == 'minmax':
             con_data[:] = (con_data - scaling_stats['min']) / scaling_stats['range']
+        elif s_type == 'none':
+            pass
         else:
             raise NotImplementedError(f"Unknown scaling type: {s_type}")
 
