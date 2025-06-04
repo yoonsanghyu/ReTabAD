@@ -9,15 +9,10 @@ import numpy as np
 from sklearn.metrics import classification_report
 from sklearn.metrics import roc_auc_score, average_precision_score
 
-from pyod.models.iforest import IForest
-from pyod.models.knn import KNN
-from pyod.models.lof import LOF
-from pyod.models.ocsvm import OCSVM
-from pyod.models.pca import PCA
-
+from models import MODELS
 from utils import seed_everything; seed_everything(42)
 from datasets.dataset import Preprocessor
-
+from metrics import get_summary_metrics
 np.set_printoptions(suppress=True, precision=6)
 
 # load data directory configuration
@@ -31,8 +26,14 @@ parser.add_argument('--preprocess', type=str, choices=['standard', 'minmax', Non
 parser.add_argument('--model_name', type=str, choices=['IForest', 'KNN', 'LOF', 'OCSVM', 'PCA'], default='IForest', help='Model to use: iforest')
 parser.add_argument('--random_state', type=int, default=0, help='Random state for train-test split')
 parser.add_argument('--cat_encoding', type=str, choices=['int', 'onehot', 'int_emb'], default='int', help='Categorical encoding method: int, onehot, or int_emb')
+parser.add_argument("--results_dir", type=str, default="results", help="Directory to save results")
 
 args = parser.parse_args()
+
+# experiment settings
+result_dir = os.path.join(args.results_dir, args.data_name)
+os.makedirs(result_dir, exist_ok=True)
+result_path = os.path.join(result_dir, f"{args.model_name}.json")
 
 # load data using Preprocessor
 preprocessor = Preprocessor(ds_name=args.data_name, 
@@ -47,28 +48,16 @@ X_train_cat, X_train_cont, y_train = (
 X_test_cat, X_test_cont, y_test = (
     test_dict['X_cat_data'], test_dict['X_cont_data'], test_dict['y']
 )
+
 # train model
-MODELS = {
-    "IForest": IForest(),
-    "KNN": KNN(),
-    "LOF": LOF(),
-    "OCSVM": OCSVM(),
-    "PCA": PCA(),
-}
-clf = MODELS[args.model_name]
+clf = MODELS[args.model_name]()
 clf.fit(X_train_cont)
 y_pred = clf.decision_function(X_test_cont)
 
 # evaluate model
-auroc = roc_auc_score(y_test, y_pred)
-auprc = average_precision_score(y_test, y_pred)
-print(auroc)
-print(auprc)
+summary_metrics = get_summary_metrics(y_test, y_pred)
+print(summary_metrics)
 
-# Save results
-result_dir = os.path.join("results", args.data_name)
-os.makedirs(result_dir, exist_ok=True)
-result_path = os.path.join(result_dir, f"{args.model_name}.txt")
+# Save summary_metrics as JSON
 with open(result_path, 'w') as f:
-    f.write(f"auroc: {auroc}\n")
-    f.write(f"auprc: {auprc}\n")
+    json.dump(summary_metrics, f, indent=4)
