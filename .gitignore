@@ -1,3 +1,5 @@
 .env
 *__pycache__
 results
+exp_db
+.vscode

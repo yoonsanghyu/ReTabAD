@@ -5,14 +5,17 @@ from sklearn.metrics import roc_auc_score, average_precision_score, f1_score, ro
 def get_auroc(y_true, y_pred):
     return roc_auc_score(y_true, y_pred)
 
+
 def get_auprc(y_true, y_pred):
     return average_precision_score(y_true, y_pred)
+
 
 def get_f1(y_true, y_pred, threshold=None):
     if threshold is None:
         threshold = get_best_f1_threshold(y_true, y_pred)
     y_pred = (y_pred > threshold).astype(int)
     return f1_score(y_true, y_pred)
+
 
 def get_best_f1_threshold(gt, anomaly_scores):
     fpr, tpr, thresholds = roc_curve(gt, anomaly_scores, drop_intermediate=False)
@@ -36,12 +39,13 @@ def get_best_f1_threshold(gt, anomaly_scores):
     best_threshold = thresholds[idx]
     return best_threshold
 
+
 def get_summary_metrics(y_true, y_pred, threshold=None):
     f1 = get_f1(y_true, y_pred, threshold)
     auroc = get_auroc(y_true, y_pred)
     auprc = get_auprc(y_true, y_pred)
     return {
-        "f1": f1,
-        "auroc": auroc,
-        "auprc": auprc
+        "f1": float(f1),
+        "auroc": float(auroc),
+        "auprc": float(auprc)
     }

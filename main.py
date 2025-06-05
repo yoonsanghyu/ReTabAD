@@ -2,65 +2,75 @@ import warnings; warnings.filterwarnings('ignore')
 import os
 import json
 
+import torch
 import argparse
 from dotenv import load_dotenv
-import pandas as pd
-import numpy as np
-from sklearn.metrics import classification_report
-from sklearn.metrics import roc_auc_score, average_precision_score
+import numpy as np; np.set_printoptions(suppress=True, precision=6)
 
-from models import MODELS
-from utils import seed_everything; seed_everything(42)
-from datasets.dataset import Preprocessor
-from metrics import get_summary_metrics
-np.set_printoptions(suppress=True, precision=6)
+from models import MODEL_LIST, TRAINERS
+from datasets import Preprocessor, DATA_LIST
+from utils import seed_everything, load_config, get_params, get_exp_id, args_to_dict
+
 
 # load data directory configuration
 load_dotenv()
 DATA_DIR = os.getenv("DATA_DIR")
 
-# Argument parsing
-parser = argparse.ArgumentParser(description="Run anomaly detection pipeline.")
-parser.add_argument('--data_name', type=str, default='wine', help='Name of the dataset (CSV file without extension)')
-parser.add_argument('--preprocess', type=str, choices=['auto'], default=None, help='Preprocessing method')
 
-parser.add_argument('--num_scaling', type=str, choices=['standard', 'minmax', None], default=None, help='Numerical scaling method: standard or minmax')
-parser.add_argument('--cat_encoding', type=str, choices=['int', 'onehot', 'int_emb'], default='int', help='Categorical encoding method: int, onehot, or int_emb')
+def main():
+    # Argument parsing
+    parser = argparse.ArgumentParser(description="Rethinking Anomaly Detection Benchmarks")
+    parser.add_argument('--data_name', choices=DATA_LIST, type=str, default="wine", help=f"Specify the data name (CSV file without extension) from: {DATA_LIST}")
+    parser.add_argument("--model_name", choices=MODEL_LIST, type=str, default="OCSVM", help=f"Specify the model name from: {MODEL_LIST}")
+    parser.add_argument("--cfg_file", type=str, default=None)
+    parser.add_argument("--exp_id", type=str, default=None)
+    parser.add_argument("--seed", type=int, default=42)
 
-parser.add_argument('--model_name', type=str, choices=['IForest', 'KNN', 'LOF', 'OCSVM', 'PCA'], default='OCSVM', help='Model to use: iforest')
-parser.add_argument('--random_state', type=int, default=0, help='Random state for train-test split')
-parser.add_argument("--results_dir", type=str, default="results", help="Directory to save results")
-args = parser.parse_args()
-print(args)
+    args = parser.parse_args()
 
-# experiment settings
-result_dir = os.path.join(args.results_dir, args.data_name)
-os.makedirs(result_dir, exist_ok=True)
-result_path = os.path.join(result_dir, f"{args.model_name}.json")
+    # seed
+    seed_everything(args.seed)
 
-# load data using Preprocessor
-preprocessor = Preprocessor(ds_name=args.data_name, 
-                            data_dir=DATA_DIR, 
-                            scaling_type=args.num_scaling, 
-                            cat_encoding=args.cat_encoding)
-train_dict, test_dict = preprocessor.prepare_data()
+    # meta info
+    meta_info = args_to_dict(args)
+    meta_info.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-X_train_cat, X_train_cont, y_train = (
-    train_dict['X_cat_data'], train_dict['X_cont_data'], train_dict['y']
-)
-X_test_cat, X_test_cont, y_test = (
-    test_dict['X_cat_data'], test_dict['X_cont_data'], test_dict['y']
-)
+    # parameters for the model
+    cfg = load_config(meta_info.cfg_file)
+    data_params = get_params(cfg, key="data_parameters")
+    model_params = get_params(cfg, key="model_parameters")
 
-# train model
-clf = MODELS[args.model_name]()
-clf.fit(X_train_cont)
-y_pred = clf.decision_function(X_test_cont)
+    # assign ID to the experiment
+    if meta_info.exp_id is None:
+        meta_info.exp_id = get_exp_id(data_params, model_params)
 
-# evaluate model
-summary_metrics = get_summary_metrics(y_test, y_pred)
-print(summary_metrics)
+    # load data using Preprocessor
+    preprocessor = Preprocessor(
+        ds_name=meta_info.data_name, 
+        data_dir=DATA_DIR, 
+        scaling_type=data_params.scaling_type, 
+        cat_encoding=data_params.cat_encoding
+    )
 
-# Save summary_metrics as JSON
-with open(result_path, 'w') as f:
-    json.dump(summary_metrics, f, indent=4)
+    # initialize trainer
+    trainer = TRAINERS[meta_info.model_name](
+        data_params=data_params,
+        model_params=model_params,
+        preprocessor=preprocessor,
+        meta_info=meta_info
+    )
+
+    # train and evaluate
+    trainer.train()
+    metrics = trainer.evaluate()
+    print(metrics)
+    
+    # save results
+    result_path = os.path.join(cfg.exp.result_path, meta_info.data_name, meta_info.model_name)
+    os.makedirs(result_path, exist_ok=True)
+    with open(os.path.join(result_path, f"{meta_info.exp_id}.json"), 'w') as f:
+        json.dump(metrics, f, indent=4)
+
+
+if __name__ == "__main__":
+    main()

@@ -79,9 +79,9 @@ class Preprocessor:
         return categorical_columns, continuous_columns
     
     def _encode_onehot(self):
-        ohe = OneHotEncoder(sparse=False, handle_unknown='ignore')
+        ohe = OneHotEncoder(sparse_output=False, handle_unknown='ignore')
         ohe_arr = ohe.fit_transform(self.X[self.categorical_columns])
-        ohe_cols = ohe.get_feature_names(self.categorical_columns)
+        ohe_cols = ohe.get_feature_names_out(self.categorical_columns)
         df_ohe = pd.DataFrame(ohe_arr, columns=ohe_cols, index=self.X.index)
         self.X = pd.concat([self.X.drop(columns=self.categorical_columns), df_ohe], axis=1)
         self.continuous_columns = self.X.columns.tolist()

@@ -1,0 +1,15 @@
+exp:
+  runs: 5
+  device: cuda
+  checkpoint_path: ./checkpoints/default
+  result_path: ./results/default
+
+data_parameters:
+  scaling_type: standard
+  cat_encoding: onehot
+  batch_size: 64
+
+model_parameters:
+  kernel: rbf
+  nu: 0.5
+  contamination: 0.1

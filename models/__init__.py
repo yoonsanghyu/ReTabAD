@@ -1,14 +1,17 @@
-# PyOD models
-from pyod.models.iforest import IForest
-from pyod.models.knn import KNN
-from pyod.models.lof import LOF
-from pyod.models.ocsvm import OCSVM
-from pyod.models.pca import PCA
+from models.pyod.trainer import Trainer as PyODTrainer
 
-MODELS = {
-    "IForest": IForest,
-    "KNN": KNN,
-    "LOF": LOF,
-    "OCSVM": OCSVM,
-    "PCA": PCA,
+TRAINERS = {
+    "OCSVM": PyODTrainer,
+    "LOF": PyODTrainer,
+    "KNN": PyODTrainer,
+    "IForest": PyODTrainer,
+    "PCA": PyODTrainer,
 }
+
+MODEL_LIST = [
+    "IForest",
+    "KNN",
+    "LOF",
+    "OCSVM",
+    "PCA",
+]
