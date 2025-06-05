@@ -17,13 +17,27 @@ class Preprocessor:
         self.cat_encoding = cat_encoding
 
         self.data = pd.read_csv(os.path.join(data_dir, f'{ds_name}.csv'))
-        self.X = self.data.drop(columns=['label', 'prompt'], errors='ignore')
+        self.X = self.data.drop(columns=['label'], errors='ignore')
         self.y = np.array(self.data['label'], dtype=int)
 
-        self.categorical_columns = self.X.select_dtypes(include=['object', 'category']).columns.tolist()
-        self.continuous_columns = [col for col in self.X.columns if col not in self.categorical_columns]
+        self.categorical_columns, self.continuous_columns = self.infer_column_types(self.X)
         self.org_continuous_columns = self.continuous_columns.copy()
         self.cat_dims = []
+    
+    def infer_column_types(self, X: pd.DataFrame, count_threshold: int = 5):
+        categorical_columns = []
+        continuous_columns = []
+
+        for col in X.columns:
+            series = X[col]
+            if series.dtype.name in ['object', 'category']:
+                categorical_columns.append(col)
+            elif pd.api.types.is_numeric_dtype(series) and series.nunique() <= count_threshold:
+                categorical_columns.append(col)
+            else:
+                continuous_columns.append(col)
+
+        return categorical_columns, continuous_columns
 
     def prepare_data(self):
         if self.cat_encoding == 'onehot':
@@ -129,6 +143,7 @@ class Preprocessor:
             d_min = sub_data.min(0)
             d_max = sub_data.max(0)
             d_range = d_max - d_min
+            d_range = np.where(d_range < 1e-6, 1.0, d_range)
 
             full_min = np.zeros(n_features, dtype=np.float32)
             full_range = np.ones(n_features, dtype=np.float32)
@@ -140,6 +155,8 @@ class Preprocessor:
         elif self.scaling_type == 'standard':
             mean = sub_data.mean(0)
             std = sub_data.std(0)
+            std = np.where(std < 1e-6, 1.0, std)  # NaN
+
 
             full_mean = np.zeros(n_features, dtype=np.float32)
             full_std = np.ones(n_features, dtype=np.float32)
