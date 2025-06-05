@@ -31,6 +31,8 @@ class Preprocessor:
             self._encode_int()
         elif self.cat_encoding == 'int_emb':
             self._encode_int_emb()
+        elif self.cat_encoding == 'txt_emb':
+            self._encode_txt_emb()
         else:
             raise NotImplementedError(f"Unsupported cat_encoding: {self.cat_encoding}")
 
@@ -101,6 +103,9 @@ class Preprocessor:
             self.X[col] = le.transform(self.X[col])
             self.cat_dims.append(len(le.classes_))
 
+    def _encode_txt_emb(self):
+        pass
+
     def _impute_and_cast(self):
         for col in self.continuous_columns:
             self.X[col] = self.X[col].astype(float)
@@ -123,7 +128,7 @@ class Preprocessor:
 
     def _compute_scaling_stats(self):
         # Only continuous value
-        data = self.X_train['data'][:,self.con_idxs]
+        data = self.X_train['data'][:,self.con_idxs].astype(float)
         n_features = data.shape[1]
 
         if self.scaling_type is None:
@@ -172,26 +177,39 @@ class Preprocessor:
     def _make_dataset(self, X, y):
         X_data, X_mask = X['data'], X['mask']
         y = y['data']
+
+        # numerical value
         con_data = X_data[:, self.con_idxs].astype(np.float32)
         con_mask = X_mask[:, self.con_idxs].astype(np.int64)
-        cat_data = X_data[:, self.cat_idxs].astype(np.int64) if self.cat_idxs else None
-        cat_mask = X_mask[:, self.cat_idxs].astype(np.int64) if self.cat_idxs else None
-
         if self.scaling_params['type'] == 'standard':
             con_data = (con_data - self.scaling_params['mean']) / self.scaling_params['std']
         elif self.scaling_params['type'] == 'minmax':
             con_data = (con_data - self.scaling_params['min']) / self.scaling_params['range']
 
-        # Add dummy cls token to categorical features
-        cls_token = np.zeros((y.shape[0], 1), dtype=np.int64)
-        cls_mask = np.ones((y.shape[0], 1), dtype=np.int64)
+        # categorical value
+        if self.cat_encoding == 'txt_emb':
+            cat_data = X_data[:, self.cat_idxs]
+            cat_mask = X_mask[:, self.cat_idxs].astype(np.int64)
 
-        if cat_data is not None:
+            cls_tokens = np.array(['CLS'] * y.shape[0], dtype=object).reshape(-1, 1)
+            cls_masks = np.ones((y.shape[0], 1), dtype=np.int64)
+
+            cat_data = np.concatenate([cls_tokens, cat_data], axis=1)
+            cat_mask = np.concatenate([cls_masks, cat_mask], axis=1)
+
+        elif self.cat_encoding == 'int_emb':
+            cat_data = X_data[:, self.cat_idxs].astype(np.int64)
+            cat_mask = X_mask[:, self.cat_idxs].astype(np.int64)
+
+            cls_token = np.zeros((y.shape[0], 1), dtype=np.int64)
+            cls_mask = np.ones((y.shape[0], 1), dtype=np.int64)
+
             cat_data = np.concatenate([cls_token, cat_data], axis=1)
             cat_mask = np.concatenate([cls_mask, cat_mask], axis=1)
         else:
-            cat_data = cls_token
-            cat_mask = cls_mask
+            cat_data = None
+            cat_mask = None
+
 
         return {
             'X_cat_data': cat_data,
@@ -200,6 +218,7 @@ class Preprocessor:
             'X_cont_mask': con_mask,
             'y': y
         }
+
 
 
 class TabularADDataset(Dataset):
