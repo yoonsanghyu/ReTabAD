@@ -21,15 +21,17 @@ DATA_DIR = os.getenv("DATA_DIR")
 
 # Argument parsing
 parser = argparse.ArgumentParser(description="Run anomaly detection pipeline.")
-parser.add_argument('--data_name', type=str, default='cover', help='Name of the dataset (CSV file without extension)')
-parser.add_argument('--preprocess', type=str, choices=['standard', 'minmax', None], default='standard', help='Preprocessing method: standard or minmax')
-parser.add_argument('--cat_encoding', type=str, choices=['int', 'onehot', 'int_emb'], default='int_emb', help='Categorical encoding method: int, onehot, or int_emb')
+parser.add_argument('--data_name', type=str, default='wine', help='Name of the dataset (CSV file without extension)')
+parser.add_argument('--preprocess', type=str, choices=['auto'], default=None, help='Preprocessing method')
 
-parser.add_argument('--model_name', type=str, choices=['IForest', 'KNN', 'LOF', 'OCSVM', 'PCA'], default='IForest', help='Model to use: iforest')
+parser.add_argument('--num_scaling', type=str, choices=['standard', 'minmax', None], default=None, help='Numerical scaling method: standard or minmax')
+parser.add_argument('--cat_encoding', type=str, choices=['int', 'onehot', 'int_emb'], default='int', help='Categorical encoding method: int, onehot, or int_emb')
+
+parser.add_argument('--model_name', type=str, choices=['IForest', 'KNN', 'LOF', 'OCSVM', 'PCA'], default='OCSVM', help='Model to use: iforest')
 parser.add_argument('--random_state', type=int, default=0, help='Random state for train-test split')
 parser.add_argument("--results_dir", type=str, default="results", help="Directory to save results")
-
 args = parser.parse_args()
+print(args)
 
 # experiment settings
 result_dir = os.path.join(args.results_dir, args.data_name)
@@ -39,7 +41,7 @@ result_path = os.path.join(result_dir, f"{args.model_name}.json")
 # load data using Preprocessor
 preprocessor = Preprocessor(ds_name=args.data_name, 
                             data_dir=DATA_DIR, 
-                            scaling_type=args.preprocess, 
+                            scaling_type=args.num_scaling, 
                             cat_encoding=args.cat_encoding)
 train_dict, test_dict = preprocessor.prepare_data()
 

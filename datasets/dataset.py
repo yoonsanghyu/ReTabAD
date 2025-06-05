@@ -24,21 +24,6 @@ class Preprocessor:
         self.org_continuous_columns = self.continuous_columns.copy()
         self.cat_dims = []
     
-    def infer_column_types(self, X: pd.DataFrame, count_threshold: int = 5):
-        categorical_columns = []
-        continuous_columns = []
-
-        for col in X.columns:
-            series = X[col]
-            if series.dtype.name in ['object', 'category']:
-                categorical_columns.append(col)
-            elif pd.api.types.is_numeric_dtype(series) and series.nunique() <= count_threshold:
-                categorical_columns.append(col)
-            else:
-                continuous_columns.append(col)
-
-        return categorical_columns, continuous_columns
-
     def prepare_data(self):
         if self.cat_encoding == 'onehot':
             self._encode_onehot()
@@ -54,7 +39,9 @@ class Preprocessor:
 
         normal_idx = np.where(self.y == 0)[0]
         anomaly_idx = np.where(self.y == 1)[0]
-
+        
+        np.random.shuffle(normal_idx)
+        
         num_train = len(normal_idx) // 2
         train_idx = normal_idx[:num_train]
         test_idx = np.concatenate([normal_idx[num_train:], anomaly_idx])
@@ -76,6 +63,20 @@ class Preprocessor:
 
         return train_dict, test_dict
 
+    def infer_column_types(self, X: pd.DataFrame, count_threshold: int = 5):
+        categorical_columns = []
+        continuous_columns = []
+
+        for col in X.columns:
+            series = X[col]
+            if series.dtype.name in ['object', 'category']:
+                categorical_columns.append(col)
+            elif pd.api.types.is_numeric_dtype(series) and series.nunique() <= count_threshold:
+                categorical_columns.append(col)
+            else:
+                continuous_columns.append(col)
+
+        return categorical_columns, continuous_columns
     
     def _encode_onehot(self):
         ohe = OneHotEncoder(sparse=False, handle_unknown='ignore')
