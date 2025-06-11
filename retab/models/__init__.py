@@ -1,20 +1,27 @@
 from .base_trainer import BaseTrainer
 from .pyod_trainer.trainer import Trainer as PyODTrainer
+from .deepod_trainer.trainer import Trainer as DeepODTrainer
 from .anollm_trainer.trainer import Trainer as AnoLLMTrainer
 
+
 TRAINERS = {
+    # pyod
     "OCSVM": PyODTrainer,
     "LOF": PyODTrainer,
     "KNN": PyODTrainer,
     "IForest": PyODTrainer,
     "PCA": PyODTrainer,
-    "AnoLLM": AnoLLMTrainer
+
+    # deepod
+    "DeepSVDD": DeepODTrainer,
+    "REPEN": DeepODTrainer,
+    "RDP": DeepODTrainer,
+    "RCA": DeepODTrainer,
+    "GOAD": DeepODTrainer,
+    "SLAD": DeepODTrainer,
+
+    # anollm
+    "AnoLLM": AnoLLMTrainer,
 }
 
-MODEL_LIST = [
-    "IForest",
-    "KNN",
-    "LOF",
-    "OCSVM",
-    "PCA",
-]
+MODEL_LIST = list(TRAINERS.keys())

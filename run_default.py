@@ -51,8 +51,7 @@ def main():
         data_dir=DATA_DIR, 
         scaling_type=data_params.scaling_type, 
         cat_encoding=data_params.cat_encoding
-        )
-
+    )
 
     # initialize trainer
     trainer = TRAINERS[meta_info.model_name](

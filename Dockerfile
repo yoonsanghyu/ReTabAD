@@ -33,6 +33,7 @@ RUN pip install --upgrade pip
 # Install Python Dependency
 RUN pip install \
     tqdm==4.64.1 \
+    numpy==1.26.4 \
     pandas==2.2.3 \
     ydata-profiling==4.16.1 \
     ipywidgets==8.1.7 \
@@ -40,7 +41,10 @@ RUN pip install \
     python-dotenv==1.1.0 \
     scikit-learn==1.5.2 \
     optuna==4.2.0 \
-    optuna-dashboard==0.17.0
+    optuna-dashboard==0.17.0 \
+    datasets==3.6.0 \
+    deepod==0.4.1 \
+    transformers==4.52.4
 
 # Verify installation
 RUN python -c "import torch; print(torch.__version__); print(torch.cuda.is_available())"

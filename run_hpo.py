@@ -8,7 +8,7 @@ import numpy as np; np.set_printoptions(suppress=True, precision=6)
 import optuna
 
 from retab.models import MODEL_LIST, TRAINERS
-from retab.dataset import Preprocessor, DATA_LIST
+from retab.datasets import Preprocessor, DATA_LIST
 from retab.utils import seed_everything, load_config, get_params, get_exp_id, args_to_dict, save_best_cfg_as_yaml
 
 

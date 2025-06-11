@@ -1,0 +1,41 @@
+exp:
+  runs: 5
+  device: cuda
+  best_cfg_path: ./configs/hpo_best
+  checkpoint_path: ./checkpoints/hpo
+  result_path: ./results/hpo
+
+study:
+  direction: maximize
+  storage: "sqlite:///exp_db/retab.sqlite3"
+  n_trials: 1000
+
+data_parameters:
+  serialize: False
+  batch_size: 64
+
+model_parameters:
+  bias: False
+
+hyperparameters:
+  data_parameters:
+    scaling_type: 
+      type: categorical
+      grid: [standard, minmax]
+    cat_encoding:
+      type: categorical
+      grid: [int, onehot]
+
+  model_parameters:  
+    lr: 
+      type: categorical
+      grid: [0.0001, 0.0005, 0.001, 0.005]
+    rep_dim: 
+      type: categorical
+      grid: [32, 64, 128, 256]
+    hidden_dims:
+      type: categorical
+      grid: ["100,50", "128,64", "256,128", "512,256,128"]
+    act:
+      type: categorical
+      grid: ["ReLU", "LeakyReLU", "Tanh"]
