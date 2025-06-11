@@ -50,11 +50,11 @@ def main():
 
     # initialize preprocessor
     preprocessor = Preprocessor(
-        serialize=meta_info.serialize,
+        serialize=data_params.serialize,
         ds_name=meta_info.data_name, 
         data_dir=DATA_DIR, 
-        scaling_type=scaling_type, 
-        cat_encoding=cat_encoding
+        scaling_type=data_params.scaling_type, 
+        cat_encoding=data_params.cat_encoding
         )
 
 

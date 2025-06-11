@@ -6,8 +6,8 @@ exp:
 
 data_parameters:
   serialize: False
-  scaling_type: 
-  cat_encoding: txt_emb
+  scaling_type: standard
+  cat_encoding: onehot
   batch_size: 64
 
 model_parameters:

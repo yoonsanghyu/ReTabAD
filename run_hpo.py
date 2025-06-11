@@ -28,7 +28,7 @@ def objective(trial, cfg, meta_info):
 
     # load data using Preprocessor
     preprocessor = Preprocessor(
-        serialize=meta_info.serialize,
+        serialize=data_params.serialize,
         ds_name=meta_info.data_name, 
         data_dir=DATA_DIR, 
         scaling_type=data_params.scaling_type, 
