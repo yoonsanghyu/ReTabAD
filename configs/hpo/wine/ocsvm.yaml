@@ -1,7 +1,7 @@
 exp:
   runs: 5
   device: cuda
-  best_cfg_path: ./configs/HPO_best
+  best_cfg_path: ./configs/hpo_best
   checkpoint_path: ./checkpoints/hpo
   result_path: ./results/hpo
 
@@ -11,6 +11,7 @@ study:
   n_trials: 1000
 
 data_parameters:
+  serialize: False
   batch_size: 64
 
 model_parameters:

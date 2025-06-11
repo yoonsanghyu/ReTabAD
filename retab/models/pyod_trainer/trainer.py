@@ -7,9 +7,9 @@ from pyod.models.ocsvm import OCSVM
 from pyod.models.lof import LOF
 from pyod.models.pca import PCA
 
-from metrics import get_summary_metrics
-from datasets import Preprocessor
-from models.basetrainer import BaseTrainer
+from retab.utils import get_summary_metrics
+from retab.datasets import Preprocessor
+from retab.models import BaseTrainer
 
 
 PYOD_MODELS = {

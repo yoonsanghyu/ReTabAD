@@ -5,8 +5,9 @@ exp:
   result_path: ./results/default
 
 data_parameters:
-  scaling_type: standard
-  cat_encoding: onehot
+  serialize: False
+  scaling_type: 
+  cat_encoding: txt_emb
   batch_size: 64
 
 model_parameters:

@@ -6,7 +6,7 @@
 To run a single experiment with a specific configuration, use:
 
 ```sh
-python main.py --data_name <DATASET_NAME> --model_name <MODEL_NAME> --cfg_file <CONFIG_FILE.yaml> [--seed 42]
+python run_default.py --data_name <DATASET_NAME> --model_name <MODEL_NAME> --cfg_file <CONFIG_FILE.yaml> [--seed 42]
 ```
 - `<DATASET_NAME>`: Name of the dataset.
 - `<MODEL_NAME>`: Name of the model.
@@ -15,14 +15,14 @@ python main.py --data_name <DATASET_NAME> --model_name <MODEL_NAME> --cfg_file <
 
 Example:
 ```sh
-python main.py --data_name wine --model_name OCSVM --cfg_file configs/default/wine/ocsvm.yaml --seed 42
+python run_default.py --data_name wine --model_name OCSVM --cfg_file configs/default/wine/ocsvm.yaml --seed 42
 ```
 
 ### Hyperparameter Tuning
 To perform hyperparameter tuning using Optuna, run the following command:
 
 ```sh
-python hpo.py --data_name <DATASET_NAME> --model_name <MODEL_NAME> --cfg_file <CONFIG_FILE.yaml> [--seeds 0 1 2 3 4]
+python run_hpo.py --data_name <DATASET_NAME> --model_name <MODEL_NAME> --cfg_file <CONFIG_FILE.yaml> [--seeds 0 1 2 3 4]
 ```
 - `<DATASET_NAME>`: Name of the dataset (choose from the supported datasets).
 - `<MODEL_NAME>`: Name of the model (choose from the supported models).

@@ -7,9 +7,9 @@ from dotenv import load_dotenv
 import numpy as np; np.set_printoptions(suppress=True, precision=6)
 import optuna
 
-from models import MODEL_LIST, TRAINERS
-from datasets import Preprocessor, DATA_LIST
-from utils import seed_everything, load_config, get_params, get_exp_id, args_to_dict, save_best_cfg_as_yaml
+from retab.models import MODEL_LIST, TRAINERS
+from retab.dataset import Preprocessor, DATA_LIST
+from retab.utils import seed_everything, load_config, get_params, get_exp_id, args_to_dict, save_best_cfg_as_yaml
 
 
 # load data directory configuration
@@ -28,6 +28,7 @@ def objective(trial, cfg, meta_info):
 
     # load data using Preprocessor
     preprocessor = Preprocessor(
+        serialize=meta_info.serialize,
         ds_name=meta_info.data_name, 
         data_dir=DATA_DIR, 
         scaling_type=data_params.scaling_type, 
