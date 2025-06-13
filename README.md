@@ -15,7 +15,7 @@ python run_default.py --data_name <DATASET_NAME> --model_name <MODEL_NAME> --cfg
 
 Example:
 ```sh
-python run_default.py --data_name wine --model_name OCSVM --cfg_file configs/default/wine/ocsvm.yaml --seed 42
+python run_default.py --data_name wine --model_name OCSVM --cfg_file configs/default/pyod/OCSVM.yaml --seed 42
 ```
 
 ### Hyperparameter Tuning
@@ -31,7 +31,7 @@ python run_hpo.py --data_name <DATASET_NAME> --model_name <MODEL_NAME> --cfg_fil
 
 Example:
 ```sh
-python run_hpo.py --data_name wine --model_name OCSVM --cfg_file configs/HPO/wine/ocsvm.yaml --seeds 0 1 2 3 4
+python run_hpo.py --data_name wine --model_name OCSVM --cfg_file configs/hpo/pyod/OCSVM.yaml --seeds 0 1 2 3 4
 ```
 
 ### Optuna dashboard

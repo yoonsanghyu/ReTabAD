@@ -1,0 +1,20 @@
+exp:
+  runs: 5
+  device: cuda
+  checkpoint_path: ./checkpoints/default
+  result_path: ./results/default
+
+data_parameters:
+  serialize: False
+  scaling_type: standard
+  cat_encoding: onehot
+  batch_size: 64
+
+model_parameters:
+  algorithm: auto
+  novelty: True
+  n_neighbors: 20
+  metric: euclidean
+  contamination: 0.1
+  leaf_size: 10
+  p: 1

@@ -97,7 +97,9 @@ def main():
     meta_info.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
     # parameters for the model
-    cfg = load_config(meta_info.cfg_file)
+    # cfg = load_config(meta_info.cfg_file)
+    cfg = load_config(meta_info.cfg_file if meta_info.cfg_file.endswith('.yaml') 
+                      else os.path.join(meta_info.cfg_file, f"{meta_info.model_name}.yaml"))
 
     # set search space
     search_space = {

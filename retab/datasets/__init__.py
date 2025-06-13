@@ -8,7 +8,7 @@ DATA_LIST = [
 "vertebral",
 "wine",             
 "cover",
-"lymphography"
+"lymphography",
 "wbc",
 "yeast"
 ]
