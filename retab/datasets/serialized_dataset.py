@@ -108,11 +108,10 @@ class SerializedTabularDataset(HuggingFaceDataset):
         column_names = self.get_column_names()
         self.processed_data = []
         self.tokenized_feature_names = []
-        bos_token_id = self.tokenizer.bos_token_id
 
         for col_idx in range(n_col):
             feature_names = " " + column_names[col_idx] + " "
-            # Use __call__ method instead of separate tokenize calls
+
             tokenized_feature_names = self.tokenizer(
                 feature_names, add_special_tokens=False
             )

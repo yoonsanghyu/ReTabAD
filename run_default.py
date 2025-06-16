@@ -1,5 +1,5 @@
 import warnings; warnings.filterwarnings('ignore')
-import os
+import os 
 import json
 import pandas as pd
 
@@ -39,6 +39,7 @@ def main():
     # cfg = load_config(meta_info.cfg_file)
     cfg = load_config(meta_info.cfg_file if meta_info.cfg_file.endswith('.yaml') 
                       else os.path.join(meta_info.cfg_file, f"{meta_info.model_name}.yaml"))
+    
     data_params = get_params(cfg, key="data_parameters")
     model_params = get_params(cfg, key="model_parameters")
 
@@ -68,6 +69,7 @@ def main():
     metrics = trainer.evaluate()
     print(metrics)
     
+
     # save results
     result_path = os.path.join(cfg.exp.result_path, meta_info.data_name, meta_info.model_name)
     os.makedirs(result_path, exist_ok=True)

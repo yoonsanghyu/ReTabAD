@@ -1,6 +1,6 @@
 import random
 import typing as tp
-import os 
+import os ; os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
 from datasets import Dataset
 from dataclasses import dataclass
@@ -9,6 +9,19 @@ from torch.utils.data import DataLoader
 from tqdm import tqdm
 import pickle as pkl
 MAX_COL_LENGTH = 128
+
+import random
+import typing as tp
+import os ; os.environ["TOKENIZERS_PARALLELISM"] = "false"
+
+from datasets import Dataset
+from dataclasses import dataclass
+from transformers import DataCollatorWithPadding
+from torch.utils.data import DataLoader
+from tqdm import tqdm
+import pickle as pkl
+MAX_COL_LENGTH = 128
+
 
 class AnoLLMDataset(Dataset):
 	"""AnoLLM Dataset
@@ -74,7 +87,7 @@ class AnoLLMDataset(Dataset):
 		column_names = self.get_column_names()
 		self.processed_data = [] 
 		self.tokenized_feature_names = []
-		bos_token_id = self.tokenizer.bos_token_id
+		bos_token_id = getattr(self.tokenizer, 'bos_token_id', None)
 		
 		for col_idx in range(n_col):
 			feature_names = ' ' + column_names[col_idx] + ' '
@@ -143,8 +156,12 @@ class AnoLLMDataset(Dataset):
 		
 		# get tokenized text
 		comma_id =  self.tokenizer.convert_tokens_to_ids(',')
-		eos_id = self.tokenizer.convert_tokens_to_ids(self.tokenizer.eos_token)
-		bos_token_id = self.tokenizer.bos_token_id
+		# eos_id = self.tokenizer.convert_tokens_to_ids(self.tokenizer.eos_token)
+		# bos_token_id = self.tokenizer.bos_token_id
+		eos_token = getattr(self.tokenizer, 'eos_token', None)
+		eos_id = self.tokenizer.convert_tokens_to_ids(eos_token) if eos_token else None
+		bos_token_id = getattr(self.tokenizer, 'bos_token_id', None)
+
 		if self.is_eval:
 			tokenized_text = {"input_ids": [], "attention_mask": [], "feature_value_start":[],
 							"feature_value_end":[],'col_indices':shuffle_idx}
@@ -194,8 +211,7 @@ class AnoLLMDataset(Dataset):
 		else:
 			return self._getitem(keys)
 
-	#def add_gaussian_noise(self, value):
-#		return value + np.random.normal(0, 0.1)
+
 
 @dataclass
 class AnoLLMDataCollator(DataCollatorWithPadding):

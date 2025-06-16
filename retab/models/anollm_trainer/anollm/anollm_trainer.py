@@ -5,6 +5,7 @@ Modifications Copyright 2025 Amazon.com, Inc. or its affiliates. All Rights Rese
 '''
 
 import os
+import warnings
 import random
 import numpy as np
 import torch
@@ -17,12 +18,22 @@ from torch.nn import CrossEntropyLoss
 import torch.distributed as dist
 from torch.utils.data.distributed import DistributedSampler
 
-
 class AnoLLMTrainer(Trainer):
 	"""
-	Overwrites the get_train_dataloader methode of the HuggingFace Trainer to not remove the "unused" columns -
-	they are needed later!
+	Overwrites the get_train_dataloader methode of the HuggingFace Trainer to not remove 
+	the "unused" columns - they are needed later!
 	"""
+
+	def __init__(self, *args, **kwargs):
+		super().__init__(*args, **kwargs)
+
+		os.environ["WANDB_DISABLED"] = "true"
+		os.environ["WANDB_MODE"] = "disabled"
+
+		self.args.report_to = []
+		self.args.ddp_find_unused_parameters=False
+		self.args.num_train_epochs=100
+		
 
 	def get_train_dataloader(self) -> DataLoader:
 		if self.train_dataset is None:
@@ -46,7 +57,7 @@ class AnoLLMTrainer(Trainer):
 			pin_memory=self.args.dataloader_pin_memory,
 			worker_init_fn=_seed_worker,
 		)
-	
+		
 	# 2025-02-12: Amazon addition. 
 	def set_eval_setting(self, n_permutations):
 		self.n_permutations = n_permutations
@@ -146,7 +157,6 @@ class AnoLLMTrainer(Trainer):
 			self._memory_tracker.stop_and_update_metrics(metric)
 
 		return metric
-	# End of Amazon addition.
 
 def _seed_worker(_):
 	"""

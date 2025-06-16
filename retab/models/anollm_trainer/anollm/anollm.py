@@ -6,7 +6,7 @@ Modifications Copyright 2025 Amazon.com, Inc. or its affiliates. All Rights Rese
 import os
 import warnings
 
-import logging
+
 import numpy as np
 import pandas as pd
 import torch
@@ -47,6 +47,7 @@ class AnoLLM:
 		self,
 		llm: str,
 		experiment_dir: str = "models",
+		epochs: int=100,
 		batch_size: int = 8,
 		efficient_finetuning: str = "",
 		max_length_dict: tp.Optional[tp.Dict[str, int]] = None,
@@ -70,6 +71,7 @@ class AnoLLM:
 		# Load Model and Tokenizer from HuggingFace
 		self.efficient_finetuning = efficient_finetuning
 		self.llm = llm
+		
 		self.tokenizer = AutoTokenizer.from_pretrained(self.llm)
 		self.tokenizer.pad_token = self.tokenizer.eos_token
 		if not random_init:
@@ -106,6 +108,7 @@ class AnoLLM:
 
 		# Set the training hyperparameters
 		self.experiment_dir = experiment_dir
+		self.epochs = epochs
 		self.batch_size = batch_size
 		self.max_length_dict = max_length_dict
 		self.textual_columns = textual_columns
@@ -117,7 +120,6 @@ class AnoLLM:
 		data: tp.Union[pd.DataFrame, np.ndarray],
 		column_names: tp.Optional[tp.List[str]] = None,
 		resume_from_checkpoint: tp.Union[bool, str] = False,
-		use_wandb: bool = False,
 		data_val: tp.Union[pd.DataFrame, np.ndarray] = None,
 		label_val: np.ndarray = None,
 		eval_steps: int = 400,
@@ -136,7 +138,7 @@ class AnoLLM:
 		df = _array_to_dataframe(data, columns=column_names)
 
 		# Convert DataFrame into HuggingFace dataset object
-		logging.info("Convert data into HuggingFace dataset object...")
+		print("Convert data into HuggingFace dataset object...")
 		dataset = AnoLLMDataset.from_pandas(df, preserve_index=False)
 		dataset.set_tokenizer(self.tokenizer)
 		dataset.set_textual_columns(self.textual_columns)
@@ -145,10 +147,10 @@ class AnoLLM:
 
 		processed_data_path = Path(processed_data_dir) / "train_data.pkl" if processed_data_dir is not None else None 
 		dataset.prepare(is_eval = False, max_length_dict=self.max_length_dict, data_path=processed_data_path)
-		print("Data 0:", self.tokenizer.decode(dataset[0]['input_ids'] ))
+		# print("Data 0:", self.tokenizer.decode(dataset[0]['input_ids'] ))
 
 		# Set training hyperparameters
-		logging.info("Create AnoLLM Trainer...")
+		print("Create AnoLLM Trainer...")
 		trainer_args = {}
 
 		if data_val is not None:
@@ -168,15 +170,9 @@ class AnoLLM:
 			self.train_hyperparameters["eval_steps"] = eval_steps
 			trainer_args["eval_dataset"] = dataset_val
 		
-		if use_wandb:
-			self.train_hyperparameters["report_to"] = ["wandb"]
-			self.train_hyperparameters["logging_strategy"] = "steps"
-			self.train_hyperparameters["logging_dir"] = "./logs"
-			self.train_hyperparameters["logging_steps"] = 50
-			self.train_hyperparameters["log_level"] = 'info'	
-		
 		training_args = TrainingArguments(
 			self.experiment_dir,
+			num_train_epochs = self.epochs,
 			per_device_train_batch_size=self.batch_size,
 			per_device_eval_batch_size=self.batch_size * 2,
 			save_strategy = 'no',
@@ -198,7 +194,7 @@ class AnoLLM:
 			trainer.set_eval_setting(n_permutations=1)
 
 		# Start training
-		logging.info("Start training...")
+		print("Start training...")
 		trainer.train(resume_from_checkpoint=resume_from_checkpoint)
 
 		return trainer
@@ -222,7 +218,7 @@ class AnoLLM:
 		# np.ndarray: Anomaly scores for each sample in the test data. Size: (n_test, n_permutation) or (n_test, n_features, n_permutation) if feature_wise is True
 		'''
 		# Convert DataFrame into HuggingFace dataset object
-		logging.info("Convert data into HuggingFace dataset object...")
+		print("Convert data into HuggingFace dataset object...")
 		df_test = _array_to_dataframe(data, columns=column_names)
 		dataset = AnoLLMDataset.from_pandas(df_test, preserve_index=False)
 		dataset.set_tokenizer(self.tokenizer)
@@ -322,4 +318,4 @@ class AnoLLM:
 			path: path where AnoLLM model is saved
 		"""
 		load_model(self.model, path)
-
+		

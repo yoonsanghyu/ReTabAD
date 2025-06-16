@@ -1,0 +1,28 @@
+exp:
+  runs: 5
+  device: cuda
+  best_cfg_path: ./configs/hpo_best
+  checkpoint_path: ./checkpoints/hpo
+  result_path: ./results/hpo
+
+study:
+  direction: maximize
+  storage: "sqlite:///exp_db/retab.sqlite3"
+  n_trials: 1000
+
+data_parameters:
+  serialize: True
+  scaling_type: 
+  cat_encoding: txt_emb
+  batch_size: 8
+
+model_parameters:
+  epochs: 5
+  n_permutations: 21
+
+hyperparameters:
+  model_parameters:
+    model:
+      type: categorical
+      grid: [smolLM, smolLM360]
+
