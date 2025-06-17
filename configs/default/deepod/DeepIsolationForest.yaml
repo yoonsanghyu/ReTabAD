@@ -1,0 +1,17 @@
+exp:
+  device: cuda
+  checkpoint_path: ./checkpoints/default
+  result_path: ./results/default
+
+data_parameters:
+  scaling_type: standard
+  cat_encoding: onehot
+  batch_size: 64
+
+model_parameters:
+  lr: 1.0e-3                # For consistency only, unused in this model
+  rep_dim: 128              # Representation dimension
+  hidden_dims: "100,50"     # Hidden layer dimensions
+  n_ensemble: 50            # Number of ensemble models - key param
+  n_estimators: 6           # Number of estimators per ensemble - key param
+  max_samples: 256          # Maximum samples for training each tree - key param

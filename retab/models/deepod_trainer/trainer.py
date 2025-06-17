@@ -32,16 +32,11 @@ class Trainer(BaseTrainer):
         else:
             self.model = model_obj(**model_params)
 
-        self.X_train_cont = torch.tensor(self.X_train_cont, dtype=torch.float32)
-        self.X_test_cont = torch.tensor(self.X_test_cont, dtype=torch.float32)
-        self.y_train = torch.tensor(self.y_train, dtype=torch.float32)
-        self.y_test = torch.tensor(self.y_test, dtype=torch.float32)
-
     def train(self):
         self.model.fit(X=self.X_train_cont)
 
     @torch.no_grad()
     def evaluate(self):        
         ascs = self.model.decision_function(self.X_test_cont)
-        metrics = get_summary_metrics(y_true=self.y_test.cpu().numpy(), y_pred=ascs)
+        metrics = get_summary_metrics(y_true=self.y_test, y_pred=ascs)
         return metrics

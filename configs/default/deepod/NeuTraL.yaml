@@ -1,0 +1,18 @@
+exp:
+  device: cuda
+  checkpoint_path: ./checkpoints/default
+  result_path: ./results/default
+
+data_parameters:
+  scaling_type: standard
+  cat_encoding: onehot
+  batch_size: 64
+
+model_parameters:
+  lr: 1.0e-3
+  n_trans: 11               # Number of transformations (key param)
+  trans_type: "residual"    # Transformation type (key param)
+  temp: 0.1                 # Temperature parameter (key param)
+  rep_dim: 128              # Representation dimension
+  hidden_dims: "100,50"     # Hidden layer dimensions
+  trans_hidden_dims: 50     # Transformation network hidden dims (key param)

@@ -1,0 +1,20 @@
+exp:
+  device: cuda
+  checkpoint_path: ./checkpoints/default
+  result_path: ./results/default
+
+data_parameters:
+  scaling_type: standard
+  cat_encoding: onehot
+  batch_size: 64
+
+model_parameters:
+  lr: 1.0e-3
+  n_trans: 256              # Number of transformations (key param)
+  trans_dim: 32             # Transformation dimension (key param)
+  alpha: 0.1                # Regularization weight (key param)
+  margin: 1.0               # Margin for margin loss (key param)
+  eps: 0                    # Epsilon value for numerical stability
+  kernel_size: 1            # Kernel size for convolution
+  hidden_dim: 8             # Hidden layer dimension
+  n_layers: 5               # Number of network layers

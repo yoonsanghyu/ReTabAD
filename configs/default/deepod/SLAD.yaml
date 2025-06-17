@@ -1,0 +1,18 @@
+exp:
+  device: cuda
+  checkpoint_path: ./checkpoints/default
+  result_path: ./results/default
+
+data_parameters:
+  scaling_type: standard
+  cat_encoding: onehot
+  batch_size: 64
+
+model_parameters:
+  lr: 1.0e-3
+  hidden_dims: 100          # Single hidden dimension (not string format)
+  distribution_size: 10     # Group member size (c in paper) - (key param)
+  n_slad_ensemble: 20       # SLAD ensemble size - (key param)
+  subspace_pool_size: 50    # Subspace pool size - (key param)
+  magnify_factor: 200       # Scale magnification factor - (key param)
+  n_unified_features: 128   # Dimensionality after transformation (h in paper) -(key param)

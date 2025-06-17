@@ -1,0 +1,16 @@
+exp:
+  device: cuda
+  checkpoint_path: ./checkpoints/default
+  result_path: ./results/default
+
+data_parameters:
+  scaling_type: standard
+  cat_encoding: onehot
+  batch_size: 64
+
+model_parameters:
+  lr: 1.0e-3
+  rep_dim: 128
+  hidden_dims: "100,50"
+  alpha: 0.5
+  anom_ratio: 0.02

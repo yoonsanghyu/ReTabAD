@@ -18,7 +18,9 @@ TRAINERS = {
     "RDP": DeepODTrainer,
     "RCA": DeepODTrainer,
     "GOAD": DeepODTrainer,
+    "NeuTraL": DeepODTrainer,
     "SLAD": DeepODTrainer,
+    "DeepIsolationForest": DeepODTrainer,
 
     # anollm
     "AnoLLM": AnoLLMTrainer,
