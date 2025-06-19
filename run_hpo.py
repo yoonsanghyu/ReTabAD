@@ -19,12 +19,15 @@ DATA_DIR = os.getenv("DATA_DIR")
 
 def objective(trial, cfg, meta_info):
     
+    # prepare parameters for the experiment
+    meta_info.update(get_params(cfg, key="exp"))
     data_params = get_params(cfg, key="data_parameters", trial=trial, HPO=True)
     model_params = get_params(cfg, key="model_parameters", trial=trial, HPO=True)
 
     # assign ID to the experiment
-    if meta_info.exp_id is None:
-        meta_info.exp_id = get_exp_id(data_params, model_params)
+    abbrevs_path = os.path.join(meta_info.checkpoint_path, meta_info.data_name, meta_info.model_name, "mapping.json")
+    os.makedirs(os.path.dirname(abbrevs_path), exist_ok=True)
+    meta_info.exp_id = get_exp_id(data_params, model_params, abbrevs_path)
 
     # load data using Preprocessor
     preprocessor = Preprocessor(
@@ -44,6 +47,7 @@ def objective(trial, cfg, meta_info):
         # run over different seeds
         for seed in meta_info.seeds:
             # set seed
+            meta_info.seed = seed
             seed_everything(seed)
 
             # initialize trainer
@@ -97,7 +101,6 @@ def main():
     meta_info.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
     # parameters for the model
-    # cfg = load_config(meta_info.cfg_file)
     cfg = load_config(meta_info.cfg_file if meta_info.cfg_file.endswith('.yaml') 
                       else os.path.join(meta_info.cfg_file, f"{meta_info.model_name}.yaml"))
 

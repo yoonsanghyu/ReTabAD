@@ -101,6 +101,7 @@ class Preprocessor:
 
         self.X_train, self.y_train = X_train, y_train
         self.X_test, self.y_test = X_test, y_test
+        self.nfeatures = self.X_train["data"].shape[1]
 
         self.cat_idxs, self.con_idxs = compute_feature_indices(
             self.X, self.cat_encoding, self.categorical_columns, self.continuous_columns

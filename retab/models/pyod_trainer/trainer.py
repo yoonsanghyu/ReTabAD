@@ -1,6 +1,7 @@
 import torch
-from addict import Dict
+from joblib import dump, load
 
+from addict import Dict
 from pyod.models.iforest import IForest
 from pyod.models.knn import KNN
 from pyod.models.ocsvm import OCSVM
@@ -36,9 +37,17 @@ class Trainer(BaseTrainer):
 
     def train(self):
         self.model.fit(X=self.X_train_cont)
+        self.save()
 
     @torch.no_grad()
-    def evaluate(self):        
+    def evaluate(self):
+        self.load()
         ascs = self.model.decision_function(self.X_test_cont)
         metrics = get_summary_metrics(y_true=self.y_test, y_pred=ascs)
         return metrics
+    
+    def save(self):
+        dump(self.model, self.ckpt_path)
+
+    def load(self):
+        self.model = load(self.ckpt_path)

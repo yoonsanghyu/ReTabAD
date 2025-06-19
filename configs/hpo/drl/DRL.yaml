@@ -10,42 +10,38 @@ study:
 
 data_parameters:
   serialize: False
-  batch_size: 64
+  batch_size: 512
 
 model_parameters:
-  random_state: 42
-  standardization: True
+  epochs: 200
+  learning_rate: 0.05
+  sche_gamma: 0.98
+  en_nlayers: 3
+  de_nlayers: 3
+  hidden_dim: 128
+  diversity: True
+  plearn: False
+  input_info: True
+  input_info_ratio: 0.1
+  cl: True
+  cl_ratio: 0.06
+  basis_vector_num: 5
 
 hyperparameters:
   data_parameters:
-    scaling_type:
+    scaling_type: 
       type: categorical
       grid: [standard, minmax]
     cat_encoding:
       type: categorical
       grid: [int, onehot]
-  
   model_parameters:
-    n_components:
+    learning_rate:
       type: categorical
-      grid: [10, 15, 20, 25]
-    
-    n_selected_components:
+      grid: [0.1, 0.05, 0.01, 0.005, 0.001, 0.0005, 0.0001]
+    input_info_ratio:
       type: categorical
-      grid: [3, 5, 8, null]
-      
-    contamination:
+      grid: [0.05, 0.1, 0.15]
+    cl_ratio:
       type: categorical
-      grid: [0.01, 0.05, 0.1]
-    
-    whiten:
-      type: categorical
-      grid: [true, false]
-    
-    weighted:
-      type: categorical
-      grid: [true, false]
-    
-    svd_solver:
-      type: categorical
-      grid: [auto, full]
+      grid: [0.03, 0.06, 0.09]

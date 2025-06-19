@@ -36,16 +36,18 @@ def main():
     meta_info.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
     # parameters for the model
-    # cfg = load_config(meta_info.cfg_file)
     cfg = load_config(meta_info.cfg_file if meta_info.cfg_file.endswith('.yaml') 
                       else os.path.join(meta_info.cfg_file, f"{meta_info.model_name}.yaml"))
     
+    meta_info.update(get_params(cfg, key="exp")) 
     data_params = get_params(cfg, key="data_parameters")
     model_params = get_params(cfg, key="model_parameters")
 
     # assign ID to the experiment
     if meta_info.exp_id is None:
-        meta_info.exp_id = get_exp_id(data_params, model_params)
+        abbrevs_path = os.path.join(meta_info.checkpoint_path, meta_info.data_name, meta_info.model_name, "mapping.json")
+        os.makedirs(os.path.dirname(abbrevs_path), exist_ok=True)
+        meta_info.exp_id = get_exp_id(data_params, model_params, abbrevs_path)
 
     # initialize preprocessor
     preprocessor = Preprocessor(
@@ -68,7 +70,6 @@ def main():
     trainer.train()
     metrics = trainer.evaluate()
     print(metrics)
-    
 
     # save results
     result_path = os.path.join(cfg.exp.result_path, meta_info.data_name, meta_info.model_name)

@@ -1,0 +1,29 @@
+exp:
+  checkpoint_path: ./checkpoints/default
+  result_path: ./results/default
+
+study:
+  direction: maximize
+  storage: "sqlite:///exp_db/retab.sqlite3"
+  n_trials: 1000
+
+data_parameters:
+  serialize: False
+  batch_size: 512
+  scaling_type: standard
+  cat_encoding: int
+
+model_parameters:
+  epochs: 200
+  learning_rate: 0.05
+  sche_gamma: 0.98
+  en_nlayers: 3
+  de_nlayers: 3
+  hidden_dim: 128
+  diversity: True
+  plearn: False
+  input_info: True
+  input_info_ratio: 0.1
+  cl: True
+  cl_ratio: 0.06
+  basis_vector_num: 5

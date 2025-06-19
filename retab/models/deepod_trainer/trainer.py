@@ -1,4 +1,6 @@
 import torch
+import pickle
+
 from addict import Dict
 from deepod.models.tabular import DeepSVDD, REPEN, RDP, RCA, GOAD, NeuTraL, SLAD, DeepIsolationForest
 
@@ -34,9 +36,19 @@ class Trainer(BaseTrainer):
 
     def train(self):
         self.model.fit(X=self.X_train_cont)
+        self.save()
 
     @torch.no_grad()
-    def evaluate(self):        
+    def evaluate(self):
+        self.load()
         ascs = self.model.decision_function(self.X_test_cont)
         metrics = get_summary_metrics(y_true=self.y_test, y_pred=ascs)
         return metrics
+    
+    def save(self):
+        with open(self.ckpt_path, 'wb') as f:
+            pickle.dump(self.model, f)
+
+    def load(self):
+        with open(self.ckpt_path, 'rb') as f:
+            self.model = pickle.load(f)

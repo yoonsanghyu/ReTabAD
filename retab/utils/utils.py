@@ -6,6 +6,7 @@ import logging
 import argparse
 from sklearn.metrics import roc_auc_score, average_precision_score
 import yaml
+import json
 
 
 def seed_everything(seed):
@@ -130,8 +131,36 @@ def args_to_dict(args):
     return dictionary
 
 
-def get_exp_id(data_params, model_params):
+def generate_abbreviations(keys: dict):
+    abbrevs = {}
+    used = set()
+
+    for key in keys:
+        # split key by '_' and make abbreviation
+        parts = key.split('_')
+        abbr = ''.join([p[0] for p in parts])
+        
+        # when key exists, add number to make it unique
+        candidate = abbr
+        i = 1
+        while candidate in used:
+            candidate = f"{abbr}{i}"
+            i += 1
+        
+        abbrevs[key] = candidate
+        used.add(candidate)
+
+    return abbrevs
+
+
+def get_exp_id(data_params, model_params, abbrevs_path=None):
     # Merge both dicts, sort by key, and concatenate key-value pairs
     merged = {**data_params, **model_params}
-    exp_id = '-'.join(f"{k}={merged[k]}" for k in sorted(merged.keys()))
+    abbrevs = generate_abbreviations(merged.keys())
+    abbrevs = {k: abbrevs[k] for k in sorted(merged.keys())}
+
+    if abbrevs_path:
+        with open(abbrevs_path, 'w') as f:
+            json.dump(abbrevs, f, indent=4, ensure_ascii=False)
+    exp_id = '-'.join(f"{abbrevs[k]}={merged[k]}" for k in sorted(merged.keys()))
     return exp_id

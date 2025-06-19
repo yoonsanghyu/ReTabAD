@@ -1,6 +1,4 @@
 exp:
-  runs: 5
-  device: cuda
   best_cfg_path: ./configs/hpo_best
   checkpoint_path: ./checkpoints/hpo
   result_path: ./results/hpo

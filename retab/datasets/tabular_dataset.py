@@ -44,10 +44,17 @@ class TabularDataset(Dataset):
         Returns:
             dict: Dictionary containing features and labels
         """
-        return {
-            "cat_features": self.X_cat_data[idx],
-            "cat_mask": self.X_cat_mask[idx],
-            "cont_features": self.X_cont_data[idx],
-            "cont_mask": self.X_cont_mask[idx],
-            "label": self.y[idx],
-        }
+        if self.X_cat_data:
+            return {
+                "cat_features": self.X_cat_data[idx],
+                "cat_mask": self.X_cat_mask[idx],
+                "cont_features": self.X_cont_data[idx],
+                "cont_mask": self.X_cont_mask[idx],
+                "label": self.y[idx],
+            }
+        else:
+            return {
+                "cont_features": self.X_cont_data[idx],
+                "cont_mask": self.X_cont_mask[idx],
+                "label": self.y[idx],
+            }
