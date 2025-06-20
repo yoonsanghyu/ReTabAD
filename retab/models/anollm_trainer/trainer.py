@@ -30,13 +30,15 @@ class Trainer(BaseTrainer):
 
     def train(self):
         self.model.fit(data=self.X_train, column_names=self.column_names)
+        self.save()
 
     @torch.no_grad()
     def evaluate(self): 
-        scores = self.model.decision_function(data=self.X_test, 
-                                              column_names=self.column_names,
-                                              n_permutations=self.model_params.n_permutations)
-        metrics = get_summary_metrics(y_true=self.y_test, y_pred=scores.mean(axis=1))
+        self.load()
+        ascs = self.model.decision_function(data=self.X_test, 
+                                            column_names=self.column_names,
+                                            n_permutations=self.model_params.n_permutations)
+        metrics = get_summary_metrics(y_true=self.y_test, y_pred=ascs.mean(axis=1))
         return metrics
 
     def save(self):

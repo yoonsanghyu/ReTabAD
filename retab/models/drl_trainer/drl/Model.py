@@ -28,9 +28,9 @@ def random_orthogonal_vectors(num_vectors, vector_dim):
     return orthogonal_vectors
 
 
-class DRL(nn.Module):
+class DRLNetwork(nn.Module):
     def __init__(self, model_config):
-        super(DRL, self).__init__()
+        super(DRLNetwork, self).__init__()
         self.data_dim = model_config['data_dim']
         self.hidden_dim = model_config['hidden_dim']
 

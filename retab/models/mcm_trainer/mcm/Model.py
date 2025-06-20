@@ -5,9 +5,9 @@ from torch.autograd import Variable
 from .MaskNets import MultiNets, Generator
 
 
-class MCM(nn.Module):
+class MCMNetwork(nn.Module):
     def __init__(self, model_config):
-        super(MCM, self).__init__()
+        super(MCMNetwork, self).__init__()
         self.data_dim = model_config['data_dim']
         self.hidden_dim = model_config['hidden_dim']
         self.z_dim = model_config['z_dim']
