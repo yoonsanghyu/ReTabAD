@@ -9,12 +9,12 @@ study:
 
 data_parameters:
   serialize: False
-  batch_size: 512
-  scaling_type: standard
-  cat_encoding: int
+  batch_size: 256
+  scaling_type: 
+  cat_encoding: onehot
 
 model_parameters:
-  epochs: 200
+  epochs: 50
   learning_rate: 0.05
   sche_gamma: 0.98
   en_nlayers: 3

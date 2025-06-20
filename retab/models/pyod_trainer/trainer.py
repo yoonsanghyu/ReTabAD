@@ -1,3 +1,4 @@
+import os
 import torch
 from joblib import dump, load
 
@@ -34,6 +35,8 @@ class Trainer(BaseTrainer):
             self.model = model_obj(**model_params)
         else:
             self.model = model_obj(**model_params)
+        self.ckpt_path = os.path.join(meta_info.checkpoint_path, meta_info.data_name, meta_info.model_name, meta_info.exp_id, f'{meta_info.seed}.pth')
+        os.makedirs(os.path.dirname(self.ckpt_path), exist_ok=True)
 
     def train(self):
         self.model.fit(X=self.X_train_cont)
