@@ -33,24 +33,24 @@ class BaseTrainer:
             self.X_test_cont = self.test_dict['X_cont_data']
             self.X_train = self.X_test = None
 
-        # pytorch dataset and dataloader
-        self.trainset = TabularDataset(
-            X_cat_data = self.train_dict["X_cat_data"],
-            X_cat_mask = self.train_dict["X_cat_mask"],
-            X_cont_data = self.train_dict["X_cont_data"],
-            X_cont_mask = self.train_dict["X_cont_mask"],
-            y = self.train_dict["y"]
-        )
-        self.trainloader = DataLoader(self.trainset, batch_size=self.data_params.batch_size, shuffle=True)
+            # pytorch dataset and dataloader
+            self.trainset = TabularDataset(
+                X_cat_data = self.train_dict["X_cat_data"],
+                X_cat_mask = self.train_dict["X_cat_mask"],
+                X_cont_data = self.train_dict["X_cont_data"],
+                X_cont_mask = self.train_dict["X_cont_mask"],
+                y = self.train_dict["y"]
+            )
+            self.trainloader = DataLoader(self.trainset, batch_size=self.data_params.batch_size, shuffle=True)
 
-        self.testset = TabularDataset(
-            X_cat_data = self.test_dict["X_cat_data"],
-            X_cat_mask = self.test_dict["X_cat_mask"],
-            X_cont_data = self.test_dict["X_cont_data"],
-            X_cont_mask = self.test_dict["X_cont_mask"],
-            y = self.test_dict["y"]
-        )
-        self.testloader = DataLoader(self.testset, batch_size=self.data_params.batch_size, shuffle=False)
+            self.testset = TabularDataset(
+                X_cat_data = self.test_dict["X_cat_data"],
+                X_cat_mask = self.test_dict["X_cat_mask"],
+                X_cont_data = self.test_dict["X_cont_data"],
+                X_cont_mask = self.test_dict["X_cont_mask"],
+                y = self.test_dict["y"]
+            )
+            self.testloader = DataLoader(self.testset, batch_size=self.data_params.batch_size, shuffle=False)
 
         # checkpoint path for saving and loading model
         self.ckpt_path = os.path.join(meta_info.checkpoint_path, meta_info.data_name, meta_info.model_name, meta_info.exp_id, f'{meta_info.seed}.pth')
