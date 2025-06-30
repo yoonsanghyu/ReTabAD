@@ -308,8 +308,8 @@ class AnoLLM:
 		else:
 			os.mkdir(directory)
 
-		model_to_save = self.model.module
-		save_model(model_to_save, path)
+		# model_to_save = self.model.module
+		save_model(self.model, path)
 	
 	def load_from_state_dict(self, path: str):
 		"""Load AnoLLM model from state_dict
