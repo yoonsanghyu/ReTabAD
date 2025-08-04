@@ -4,6 +4,24 @@
 Existing tabular anomaly detection benchmarks exhibit a fundamental disconnect from industrial practice by systematically stripping away semantic context—converting textual features into opaque encodings and discarding descriptive metadata. This preprocessing rigidity limits research flexibility and prevents models from leveraging rich contextual information that domain experts routinely use. We introduce ReTabAD, a novel benchmark that <u>Re</u>stores textual semantics to enable context-aware <u>Tab</u>ular <u>A</u>nomaly <u>D</u>etection research. Our framework provides: (1) semantically-rich datasets pairing raw data with comprehensive JSON metadata containing column descriptions, logical types, and normal data characterizations, and (2) a unified pipeline that preserves semantic information, paving the way for fair comparisons across traditional ML, deep learning, and modern language model approaches. To demonstrate ReTabAD's potential, we evaluate Large Language Models as zero-shot anomaly detectors with injected domain knowledge. Results show substantial average AUROC improvements of 9.5% (Gemini-2.5-Pro) over the same models operating on context-agnostic data, which mimics traditional benchmarks. Beyond performance gains, these models exhibit sophisticated reasoning including pattern recognition and hierarchical logic. ReTabAD establishes a new research paradigm for semantic-aware anomaly detection, bridging academic benchmarks with real-world requirements.
 ## How to run this codes
 
+## Environment setting
+
+### Data Directory Configuration
+Create a `.env` file in the project root and add the following line to specify your data directory:
+
+```
+# .env
+DATA_DIR=/PATH/TO/YOUR/DATA/DIR
+```
+
+Replace the path with the location of your data if different.
+
+### Docker
+```sh
+docker build -t retabad:1.0.0 .
+docker run -itd --rm --name retabad --gpus '"device=4,5,6,7"' -m 375g -v /:/workspace retabad:1.0.0
+```
+
 ### Run a Single Experiment
 To run a single experiment with a specific configuration, use:
 
@@ -42,23 +60,3 @@ If you want to monitor with optuna-dashboard, try:
 mkdir exp_db
 optuna-dashboard sqlite:///exp_db/retab.sqlite3
 ```
-
-
-## Environment setting
-
-### Data Directory Configuration
-Create a `.env` file in the project root and add the following line to specify your data directory:
-
-```
-# .env
-DATA_DIR=/PATH/TO/YOUR/DATA/DIR
-```
-
-Replace the path with the location of your data if different.
-
-### Docker
-```sh
-docker build -t retabad:1.0.0 .
-docker run -itd --rm --name retabad --gpus '"device=4,5,6,7"' -m 375g -v /:/workspace retabad:1.0.0
-```
-
