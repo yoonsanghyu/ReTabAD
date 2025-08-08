@@ -81,6 +81,8 @@ nvidia-cusparse-cu12==12.1.0.106 \
 nvidia-nccl-cu12==2.20.5 \
 nvidia-nvjitlink-cu12==12.9.86 \
 nvidia-nvtx-cu12==12.1.105 \
+optuna==4.4.0 \
+optuna-dashboard==0.19.0 \
 packaging==25.0 \
 pandas==2.3.0 \
 peft==0.11.1 \

@@ -22,7 +22,7 @@ def main():
     parser = argparse.ArgumentParser(description="Rethinking Anomaly Detection Benchmarks")
     parser.add_argument('--data_name', choices=DATA_LIST, type=str, default="wine", help=f"Specify the data name (CSV file without extension) from: {DATA_LIST}")
     parser.add_argument("--model_name", choices=MODEL_LIST, type=str, default="AnoLLM", help=f"Specify the model name from: {MODEL_LIST}")
-    parser.add_argument("--cfg_file", type=str, default=None)
+    parser.add_argument("--cfg_file", type=str)
     parser.add_argument("--exp_id", type=str, default=None)
     parser.add_argument("--seed", type=int, default=42)
 
@@ -36,8 +36,7 @@ def main():
     meta_info.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
     # parameters for the model
-    cfg = load_config(meta_info.cfg_file if meta_info.cfg_file.endswith('.yaml') 
-                      else os.path.join(meta_info.cfg_file, f"{meta_info.model_name}.yaml"))
+    cfg = load_config(meta_info.cfg_file)
     
     meta_info.update(get_params(cfg, key="exp")) 
     data_params = get_params(cfg, key="data_parameters")

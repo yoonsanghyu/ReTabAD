@@ -40,7 +40,7 @@ class Preprocessor:
         self.scaling_type = scaling_type
         self.cat_encoding = cat_encoding
 
-        self.data = pd.read_csv(os.path.join(data_dir, f"{ds_name}.csv"))
+        self.data = pd.read_csv(os.path.join(data_dir, ds_name, f"{ds_name}.csv"))
         self.X = self.data.drop(columns=["label"], errors="ignore")
         self.column_names = self.X.columns.tolist()
         self.y = np.array(self.data["label"], dtype=int)
@@ -187,6 +187,9 @@ class Preprocessor:
             full_std[normalize_mask] = std
 
             return {"type": "standard", "mean": full_mean, "std": full_std}
+
+        elif self.scaling_type == "none":
+            return {"type": "none"}
 
         else:
             raise NotImplementedError(f"Unsupported scaling_type: {self.scaling_type}")
