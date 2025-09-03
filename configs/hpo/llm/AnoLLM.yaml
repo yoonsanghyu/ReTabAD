@@ -10,15 +10,18 @@ study:
 
 data_parameters:
   serialize: True
-  scaling_type: 
-  cat_encoding: txt_emb
   batch_size: 8
+  serialize_n_buckets: 10
 
 model_parameters:
-  epochs: 5
+  epochs: 100
   n_permutations: 21
-
+  
 hyperparameters:
+  # data_parameters:
+  #   serialize_normalize_method:
+  #     type: categorical
+  #     grid: [raw, equal_width, standard]
   model_parameters:
     model:
       type: categorical

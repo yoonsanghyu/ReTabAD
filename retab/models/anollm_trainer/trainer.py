@@ -25,7 +25,7 @@ class Trainer(BaseTrainer):
                             batch_size=data_params.batch_size, 
                             max_length_dict={col: 1000 for col in self.column_names})
 
-        self.ckpt_path = os.path.join(meta_info.checkpoint_path, meta_info.data_name, meta_info.model_name, meta_info.exp_id, f'{meta_info.seed}.pth')
+        self.ckpt_path = os.path.join(meta_info.checkpoint_path, meta_info.data_name, meta_info.model_name, meta_info.exp_id, str(meta_info.seed))
         os.makedirs(os.path.dirname(self.ckpt_path), exist_ok=True)
 
     def train(self):

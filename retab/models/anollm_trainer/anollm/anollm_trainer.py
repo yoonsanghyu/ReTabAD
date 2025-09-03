@@ -13,7 +13,7 @@ import typing as tp
 from torch.utils.data import DataLoader
 from transformers import Trainer
 from sklearn import metrics
-from .anollm_dataset import AnoLLMDataCollator, AnoLLMDataLoader
+from retab.datasets import DataCollator
 from torch.nn import CrossEntropyLoss
 import torch.distributed as dist
 from torch.utils.data.distributed import DistributedSampler
@@ -26,12 +26,50 @@ class AnoLLMTrainer(Trainer):
 
 	def __init__(self, *args, **kwargs):
 		super().__init__(*args, **kwargs)
+		self.first_batch_logged = False  # Track if first batch is logged
 
 		os.environ["WANDB_DISABLED"] = "true"
 		os.environ["WANDB_MODE"] = "disabled"
 
 		self.args.report_to = []
 		self.args.ddp_find_unused_parameters=False
+
+	def training_step(self, model, inputs, num_items_in_batch=None):
+		"""Override training step to log first batch"""
+		# Log first batch sample
+		if not self.first_batch_logged:
+			self._log_first_batch(inputs)
+			self.first_batch_logged = True
+		
+		# Call parent training_step with correct arguments
+		if num_items_in_batch is not None:
+			return super().training_step(model, inputs, num_items_in_batch)
+		else:
+			return super().training_step(model, inputs)
+	
+	def _log_first_batch(self, inputs):
+		"""Log the first training batch sample after decoding"""
+		try:
+			print("\n" + "="*80)
+			print("FIRST TRAINING BATCH SAMPLE:")
+			print("="*80)
+			
+			# Get first sample from batch
+			first_sample_ids = inputs['input_ids'][0]  # First sample in batch
+			
+			# Decode the token IDs back to text
+			if hasattr(self.tokenizer, 'decode'):
+				decoded_text = self.tokenizer.decode(first_sample_ids, skip_special_tokens=True)
+				print(f"Decoded text: {decoded_text}")
+			else:
+				print("Tokenizer decode method not available")
+			
+			print(f"Token IDs: {first_sample_ids.tolist()[:50]}...")  # First 50 tokens
+			print(f"Batch shape: {inputs['input_ids'].shape}")
+			print("="*80 + "\n")
+			
+		except Exception as e:
+			print(f"Error logging first batch: {e}")
 		self.args.num_train_epochs=100
 		
 
@@ -66,7 +104,7 @@ class AnoLLMTrainer(Trainer):
 		eval_dataset = self.eval_dataset if eval_dataset is None else eval_dataset
 		# do not use distributed sampler
 		dataloader = torch.utils.data.DataLoader(eval_dataset, batch_size=self.args.eval_batch_size, shuffle = False, 
-												collate_fn = AnoLLMDataCollator(self.tokenizer))
+												collate_fn = DataCollator(self.tokenizer))
 
 		
 		perplexities = np.zeros((len(eval_dataset), self.n_permutations))

@@ -17,10 +17,11 @@ import typing as tp
 from transformers import Trainer
 from collections import OrderedDict
 from pathlib import Path
+import torch.distributed as dist
 
 from .anollm_trainer import AnoLLMTrainer 
 from .anollm_utils import _array_to_dataframe
-from .anollm_dataset import AnoLLMDataset, AnoLLMDataCollator
+from retab.datasets import SerializedTabularDataset, DataCollator
 
 from safetensors.torch import save_model, load_model
 
@@ -139,7 +140,7 @@ class AnoLLM:
 
 		# Convert DataFrame into HuggingFace dataset object
 		print("Convert data into HuggingFace dataset object...")
-		dataset = AnoLLMDataset.from_pandas(df, preserve_index=False)
+		dataset = SerializedTabularDataset.from_pandas(df, preserve_index=False)
 		dataset.set_tokenizer(self.tokenizer)
 		dataset.set_textual_columns(self.textual_columns)
 		if self.no_random_permutation:
@@ -155,7 +156,7 @@ class AnoLLM:
 
 		if data_val is not None:
 			df_val = _array_to_dataframe(data_val, columns=column_names)
-			dataset_val = AnoLLMDataset.from_pandas(df_val, preserve_index=False)
+			dataset_val = SerializedTabularDataset.from_pandas(df_val, preserve_index=False)
 			dataset_val.set_tokenizer(self.tokenizer)
 			dataset_val.set_anomaly_label(label_val)
 			dataset_val.set_textual_columns(self.textual_columns)
@@ -186,7 +187,7 @@ class AnoLLM:
 			training_args,
 			train_dataset=dataset,
 			tokenizer=self.tokenizer,
-			data_collator=AnoLLMDataCollator(self.tokenizer),
+			data_collator=DataCollator(self.tokenizer),
 			**trainer_args,
 		)
 
@@ -220,7 +221,7 @@ class AnoLLM:
 		# Convert DataFrame into HuggingFace dataset object
 		print("Convert data into HuggingFace dataset object...")
 		df_test = _array_to_dataframe(data, columns=column_names)
-		dataset = AnoLLMDataset.from_pandas(df_test, preserve_index=False)
+		dataset = SerializedTabularDataset.from_pandas(df_test, preserve_index=False)
 		dataset.set_tokenizer(self.tokenizer)
 		dataset.set_textual_columns(self.textual_columns)
 		
@@ -229,7 +230,7 @@ class AnoLLM:
 		
 		dataset.prepare(is_eval = True, max_length_dict=self.max_length_dict)
 		dataloader = torch.utils.data.DataLoader(dataset, batch_size=batch_size, shuffle = False, 
-												 collate_fn = AnoLLMDataCollator(self.tokenizer))
+												 collate_fn = DataCollator(self.tokenizer))
 		
 		self.model.to(device)
 		comma_id =  self.tokenizer.convert_tokens_to_ids(',')
@@ -301,15 +302,23 @@ class AnoLLM:
 		Args:
 			path: Path where to save the model
 		"""
+		# Only save on main process to avoid conflicts in distributed training
+		if dist.is_initialized():
+			local_rank = int(os.environ.get("LOCAL_RANK", 0))
+			if local_rank != 0:
+				return
+		
 		directory = os.path.dirname(path)
 		# Make directory
-		if os.path.isdir(directory):
-			warnings.warn(f"Directory {path} already exists and is overwritten now.")
-		else:
-			os.mkdir(directory)
+		if directory and not os.path.isdir(directory):
+			os.makedirs(directory, exist_ok=True)
 
-		# model_to_save = self.model.module
-		save_model(self.model, path)
+		# Get the underlying model (unwrap from DDP if needed)
+		model_to_save = self.model
+		if hasattr(self.model, 'module'):
+			model_to_save = self.model.module
+			
+		save_model(model_to_save, path)
 	
 	def load_from_state_dict(self, path: str):
 		"""Load AnoLLM model from state_dict
@@ -317,5 +326,11 @@ class AnoLLM:
 		Args:
 			path: path where AnoLLM model is saved
 		"""
+		# Only load on main process in distributed training
+		if dist.is_initialized():
+			local_rank = int(os.environ.get("LOCAL_RANK", 0))
+			if local_rank != 0:
+				return
+				
 		load_model(self.model, path)
 		

@@ -3,9 +3,11 @@ Data preprocessing module for tabular anomaly detection.
 """
 
 import os
+import json
 import numpy as np
 import pandas as pd
-from sklearn.preprocessing import LabelEncoder, OneHotEncoder
+import copy
+from sklearn.preprocessing import LabelEncoder, OneHotEncoder, StandardScaler
 
 from .data_utils import (
     infer_column_types,
@@ -24,28 +26,55 @@ class Preprocessor:
     
     def __init__(
         self,
-        serialize,
-        ds_name,
-        data_dir,
+        serialize: bool,
+        ds_name: str,
+        data_dir :str,
         seed: int = 42,
         task: str = "anomaly",
         scaling_type: str = "standard",
         cat_encoding: str = "int",
+        serialize_normalize_method: str = None,
+        serialize_n_buckets: int = 10,
     ):
         assert task == "anomaly", "Only 'anomaly' task is supported."
         np.random.seed(seed)
 
-        self.serialize = serialize
-        self.ds_name = ds_name
+        # ML/DL Value config
         self.scaling_type = scaling_type
         self.cat_encoding = cat_encoding
 
+        # LLM Serialize config
+        self.serialize = serialize
+        self.serialize_normalize_method = serialize_normalize_method
+        self.serialize_n_buckets = serialize_n_buckets
+
+        # Load data
+        self.ds_name = ds_name
+
+        # 1) Load table data from CSV file
+        self.data_dir = data_dir
         self.data = pd.read_csv(os.path.join(data_dir, ds_name, f"{ds_name}.csv"))
+        
+        # 2) Load text metadata from JSON file
+        try:
+            metadata_path = os.path.join(data_dir, ds_name, f"{ds_name}.json")
+            with open(metadata_path, 'r') as f:
+                self.textmeta = json.load(f)
+        except FileNotFoundError:
+            print(f"Warning: No metadata file found at {metadata_path}")
+            self.textmeta = None
+        
         self.X = self.data.drop(columns=["label"], errors="ignore")
-        self.column_names = self.X.columns.tolist()
         self.y = np.array(self.data["label"], dtype=int)
+        self.column_names = self.X.columns.tolist()
+ 
+        # Our contribution
         self.categorical_columns, self.continuous_columns = infer_column_types(self.X)
+
+        # Save original data before any transformation
+        self.X_original = self.X.copy()  
         self.org_continuous_columns = self.continuous_columns.copy()
+
         self.cat_dims = []
 
     def prepare_data(self):
@@ -55,20 +84,15 @@ class Preprocessor:
         Returns:
             tuple: (train_dict, test_dict) containing prepared data
         """
-        if self.cat_encoding == "onehot":
-            self._encode_onehot()
-        elif self.cat_encoding == "int":
-            self._encode_int()
-        elif self.cat_encoding == "int_emb":
-            self._encode_int_emb()
-        elif self.cat_encoding == "txt_emb":
-            self._encode_txt_emb()
-        else:
-            raise NotImplementedError(f"Unsupported cat_encoding: {self.cat_encoding}")
-
+        # missing value preprocessing
         self.X = impute_and_cast(
             self.X, self.categorical_columns, self.continuous_columns
         )
+        
+        # Apply serialize-specific normalization if needed
+        if self.serialize and self.serialize_normalize_method:
+            self.X = self._apply_serialize_normalization(self.X)
+        
         self.y = LabelEncoder().fit_transform(self.y)
 
         normal_idx = np.where(self.y == 0)[0]
@@ -85,15 +109,22 @@ class Preprocessor:
         X_test, y_test = split_data(self.X, self.y, nan_mask, test_idx)
 
         if self.serialize:
+            # Also split original data for result saving
+            nan_mask_original = self.X_original.notnull().astype(int)
+            X_train_original, _ = split_data(self.X_original, self.y, nan_mask_original, train_idx)
+            X_test_original, _ = split_data(self.X_original, self.y, nan_mask_original, test_idx)
+            
             train_dict = {
                 'X_data': X_train['data'], 
                 'y': y_train['data'],
+                'X_data_original': X_train_original['data'],  # Add original data
                 'column_names': self.column_names,
                 'is_serialized': self.serialize
             }
             test_dict = {
                 'X_data': X_test['data'],
                 'y': y_test['data'],
+                'X_data_original': X_test_original['data'],  # Add original data
                 'column_names': self.column_names,
                 'is_serialized': self.serialize
             }
@@ -108,6 +139,18 @@ class Preprocessor:
         )
 
         self.scaling_params = self._compute_scaling_stats()
+        
+        if self.cat_encoding == "onehot":
+            self._encode_onehot()
+        elif self.cat_encoding == "int":
+            self._encode_int()
+        elif self.cat_encoding == "int_emb":
+            self._encode_int_emb()
+        elif self.cat_encoding == "txt_emb":
+            self._encode_txt_emb()
+        else:
+            raise NotImplementedError(f"Unsupported cat_encoding: {self.cat_encoding}")
+
 
         train_dict = self._make_dataset(self.X_train, self.y_train)
         test_dict = self._make_dataset(self.X_test, self.y_test)
@@ -143,6 +186,79 @@ class Preprocessor:
     def _encode_txt_emb(self):
         """Apply text embedding encoding (placeholder)."""
         pass
+
+    def _apply_serialize_normalization(self, X):
+        """
+        Apply serialize-specific normalization to continuous columns.
+        
+        Args:
+            X: DataFrame to normalize
+            
+        Returns:
+            Normalized DataFrame
+        """
+        X = copy.deepcopy(X)
+        method = self.serialize_normalize_method
+        n_buckets = self.serialize_n_buckets
+        
+        def ordinal(n):
+            if np.isnan(n):
+                return 'NaN'
+            n = int(n)
+            if 10 <= n % 100 <= 20:
+                suffix = 'th'
+            else:
+                suffix = {1: 'st', 2: 'nd', 3: 'rd'}.get(n % 10, 'th')
+            return 'the ' + str(n) + suffix + ' percentile'
+        
+        word_list = ['Minimal', 'Slight', 'Moderate', 'Noticeable', 'Considerable', 
+                     'Significant', 'Substantial', 'Major', 'Extensive', 'Maximum']
+        
+        def get_word(n):
+            n = int(n)
+            if n == 10:
+                return word_list[-1]
+            return word_list[n]
+        
+        # Apply normalization only to continuous columns
+        for column in self.continuous_columns:
+            if X[column].dtype in ['float64', 'int64', 'uint8', 'int16', 'float32'] and X[column].nunique() > 1:
+                
+                if method == 'quantile':
+                    ranks = X[column].rank(method='min')
+                    X[column] = ranks / len(X[column]) * 100
+                    X[column] = X[column].apply(ordinal)
+                        
+                elif method == 'equal_width':
+                    X[column] = X[column].astype('float64')
+                    X[column] = (X[column] - X[column].min()) / (X[column].max() - X[column].min()) * n_buckets 
+                    
+                    if 10 % n_buckets == 0:
+                        X[column] = X[column].round(0) / 10
+                        X[column] = X[column].round(1) 
+                    else: 
+                        X[column] = X[column].round(0) / 100
+                        X[column] = X[column].round(2)
+                        
+                elif method == 'standard':
+                    scaler = StandardScaler()
+                    scaler.fit(X[column].values.reshape(-1,1))
+                    X[column] = scaler.transform(X[column].values.reshape(-1,1))
+                    X[column] = X[column].round(1)
+                    
+                elif method == 'language':
+                    X[column] = X[column].astype('float64')
+                    X[column] = (X[column] - X[column].min()) / (X[column].max() - X[column].min()) * 10
+                    X[column] = X[column].apply(get_word)
+                    
+                elif method == 'raw':
+                    # Keep original values - no transformation
+                    pass
+                    
+                else:
+                    raise ValueError(f'Invalid method. Choose from: raw, quantile, equal_width, standard, language')
+        
+        return X
 
     def _compute_scaling_stats(self):
         """Compute scaling statistics for continuous features."""

@@ -23,6 +23,9 @@ class BaseTrainer:
         if self.is_serialized:
             self.X_train = self.train_dict['X_data']
             self.X_test = self.test_dict['X_data']
+            # Store original data for result saving
+            self.X_train_original = self.train_dict.get('X_data_original', self.X_train)
+            self.X_test_original = self.test_dict.get('X_data_original', self.X_test)
             self.column_names = self.train_dict['column_names']
             self.X_train_cat = self.X_train_cont = None
             self.X_test_cat = self.X_test_cont = None

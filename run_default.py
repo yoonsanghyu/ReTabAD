@@ -1,4 +1,5 @@
 import warnings; warnings.filterwarnings('ignore')
+warnings.filterwarnings("ignore", message="Detected kernel version")
 import os 
 import json
 import pandas as pd
@@ -53,8 +54,10 @@ def main():
         serialize=data_params.serialize,
         ds_name=meta_info.data_name, 
         data_dir=DATA_DIR, 
-        scaling_type=data_params.scaling_type, 
-        cat_encoding=data_params.cat_encoding
+        scaling_type=getattr(data_params, 'scaling_type', None), 
+        cat_encoding=getattr(data_params, 'cat_encoding', None),
+        serialize_normalize_method=getattr(data_params, 'serialize_normalize_method', None),
+        serialize_n_buckets=getattr(data_params, 'serialize_n_buckets', 10)
     )
 
     # initialize trainer

@@ -4,12 +4,12 @@ exp:
   result_path: ./results/default
 
 data_parameters:
-  batch_size: 128
   serialize: True
-  serialize_normalize_method: "standard"
+  serialize_normalize_method: "raw"
   serialize_n_buckets: 10
 
 model_parameters:
-  epochs: 500
-  model: smolLM
-  n_permutations: 21
+  llm_model: "gpt-4o"
+  inference_batch_size: 15
+  max_retry: 3
+  prompt_type: "D"

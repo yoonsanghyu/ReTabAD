@@ -1,6 +1,7 @@
 import warnings
 
 from pandas.core.indexes.extension import NDArrayBackedExtensionIndex; warnings.filterwarnings('ignore')
+warnings.filterwarnings("ignore", message="Detected kernel version")
 import os
 
 import torch
