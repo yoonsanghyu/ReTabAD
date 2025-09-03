@@ -35,7 +35,7 @@ Existing tabular anomaly detection benchmarks exhibit a fundamental disconnect f
 | yeast | 1,484 | 8 | 1,389 | 95 | 6.40 |
 
 
-### Prerequisites
+## Prerequisites
 
 This project requires `Docker` and the `NVIDIA Container Toolkit` to be installed on your system.
 
@@ -65,7 +65,7 @@ This project requires `Docker` and the `NVIDIA Container Toolkit` to be installe
 
 ## 🚀 How to Run ?
 
-### Run a Single Experiment
+### 🧪 Quik Start: Run a Single Experiment
 To run a single experiment with a specific configuration, use:
 
 ```sh
@@ -81,7 +81,7 @@ Example:
 python run_default.py --data_name wine --model_name OCSVM --cfg_file configs/default/pyod/OCSVM.yaml --seed 42
 ```
 
-### Hyperparameter Tuning
+### 📈 Hyperparameter Tuning
 To perform hyperparameter tuning using Optuna, run the following command:
 
 ```sh
@@ -97,7 +97,7 @@ Example:
 python run_hpo.py --data_name wine --model_name OCSVM --cfg_file configs/hpo/pyod/OCSVM.yaml --seeds 0 1 2 3 4
 ```
 
-### Optuna dashboard
+### 📊 Monitor with Optuna Dashboard
 If you want to monitor with optuna-dashboard, try:
 ```sh
 mkdir exp_db
