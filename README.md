@@ -1,8 +1,13 @@
-# ReTabAD
+# 🤔 RETABAD: A BENCHMARK FOR RESTORING SEMANTIC CONTEXT IN TABULAR ANOMALY DETECTION
+Existing tabular anomaly detection benchmarks exhibit a fundamental disconnect from industrial practice. They systematically strip away semantic context by converting textual features into opaque encodings and discarding descriptive metadata. This preprocessing rigidity limits research flexibility and prevents models from leveraging rich contextual information that domain experts routinely use.
 
-## *Abstract*
-Existing tabular anomaly detection benchmarks exhibit a fundamental disconnect from industrial practice by systematically stripping away semantic context—converting textual features into opaque encodings and discarding descriptive metadata. This preprocessing rigidity limits research flexibility and prevents models from leveraging rich contextual information that domain experts routinely use. We introduce ReTabAD, a novel benchmark that <u>Re</u>stores textual semantics to enable context-aware <u>Tab</u>ular <u>A</u>nomaly <u>D</u>etection research. Our framework provides: (1) semantically-rich datasets pairing raw data with comprehensive JSON metadata containing column descriptions, logical types, and normal data characterizations, and (2) a unified pipeline that preserves semantic information, paving the way for fair comparisons across traditional ML, deep learning, and modern language model approaches. To demonstrate ReTabAD's potential, we evaluate Large Language Models as zero-shot anomaly detectors with injected domain knowledge. Results show substantial average AUROC improvements of 9.5% (Gemini-2.5-Pro) over the same models operating on context-agnostic data, which mimics traditional benchmarks. Beyond performance gains, these models exhibit sophisticated reasoning including pattern recognition and hierarchical logic. ReTabAD establishes a new research paradigm for semantic-aware anomaly detection, bridging academic benchmarks with real-world requirements.
+`ReTabAD` is a novel benchmark created to address this gap. It enables context-aware research by **<u>Re</u>storing** textual semantics for **<u>Tab</u>ular** **<u>A</u>nomaly** **<u>D</u>etection**.
 
+## ✨ Key Features
+
+* **📚 Semantically-Rich Datasets:** Provides raw data paired with comprehensive JSON metadata containing column descriptions, logical types, and characterizations of normal data.
+* **💡 Preserved Semantic Information:** A unified pipeline that preserves semantic information, paving the way for fair comparisons across traditional ML, deep learning, and modern language model approaches.
+* **🚀 Demonstrating LLM Potential:** We showcase ReTabAD's capabilities by evaluating Large Language Models as zero-shot anomaly detectors with injected domain knowledge. Our results show a substantial average AUROC improvement of **9.5%** (Gemini-2.5-Pro) over models operating on context-agnostic data, which mimics traditional benchmarks.
 
 ## Environment setting
 
