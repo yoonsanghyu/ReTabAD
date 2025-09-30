@@ -8,17 +8,6 @@
   <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/custom.css">
 </head>
 <body>
-  <header class="site-header">
-    <div class="container">
-      <h1><a href="{{ site.baseurl }}/">{{ site.title }}</a></h1>
-      <p>{{ site.description }}</p>
-      <nav>
-        {% for item in site.nav %}
-          <a href="{{ site.baseurl }}{{ item.url }}">{{ item.title }}</a>
-        {% endfor %}
-      </nav>
-    </div>
-  </header>
   <main class="container">
     {{ content }}
   </main>
