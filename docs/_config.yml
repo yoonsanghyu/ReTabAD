@@ -1,6 +1,6 @@
 
 title: ReTabAD
-description: ReTabAD: A Benchmark for Restoring Semantic Context in Tabular Anomaly Detection
+description: "ReTabAD: A Benchmark for Restoring Semantic Context in Tabular Anomaly Detection"
 # For project sites (username.github.io/<repo>), set baseurl to "/<repo>"
 baseurl: "/ReTabAD"
 url: "https://yoonsanghyu.github.io" # change if using a custom domain
