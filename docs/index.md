@@ -13,7 +13,9 @@ layout: default
   </div>
 </div>
 
-## 🎯 TL;DR
+## 🎯 Overview
+
+![ReTabAD Overview]({{ site.baseurl }}/assets/img/overview.png)
 
 Existing tabular anomaly detection benchmarks **systematically strip away semantic context** by converting textual features into opaque encodings. ReTabAD addresses this fundamental disconnect by providing semantically-rich datasets with comprehensive metadata.
 
