@@ -192,7 +192,7 @@ img {
   border-radius: 4px; /* 둥근 모서리 최소화 */
   margin: 2rem 0;
   box-shadow: none; /* 그림자 제거 */
-  border: 1px solid var(--border-color);
+  border: none; /* 테두리 제거 */
 }
 
 /* Tables */
@@ -225,7 +225,7 @@ tbody tr:last-child td { border-bottom: none; }
 /* Grid & Cards */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(3, 1fr); /* 3개 카드가 한 줄에 */
   gap: 1.5rem;
   margin: 2rem 0;
 }
@@ -270,6 +270,10 @@ a:hover {
 }
 
 /* Responsive */
+@media (max-width: 1024px) {
+  .grid { grid-template-columns: 1fr; } /* 작은 화면에서는 세로 배치 */
+}
+
 @media (max-width: 768px) {
   .container { padding: 0 1rem; }
   .hero h2 { font-size: 1.6rem; }
@@ -277,5 +281,4 @@ a:hover {
   .site-header h1 { font-size: 1.5rem; }
   h2 { font-size: 1.5rem; }
   .badges { flex-direction: column; align-items: flex-start; }
-  .grid { grid-template-columns: 1fr; }
 }
