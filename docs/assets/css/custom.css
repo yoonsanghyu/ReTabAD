@@ -1,50 +1,60 @@
+/*
+  논문/학술 스타일로 수정한 CSS
+  - 폰트: 세리프(Serif) 계열로 변경하여 가독성 향상
+  - 색상: 그라데이션 및 화려한 색상 제거, 차분한 단색 위주로 변경
+  - 레이아웃: 본문 폭을 줄여 텍스트에 집중하도록 조정
+  - 효과: 그림자(box-shadow), 둥근 모서리(border-radius), 애니메이션 효과 최소화
+*/
 
 :root {
-  --primary-color: #2563eb;
-  --secondary-color: #7c3aed;
-  --accent-color: #06b6d4;
-  --text-color: #1f2937;
-  --text-light: #6b7280;
-  --bg-light: #f9fafb;
-  --border-color: #e5e7eb;
+  /* 변경: 색상을 차분한 파란색과 회색 계열로 단순화 */
+  --primary-color: #0d47a1; /* 더 진하고 학술적인 느낌의 파란색 */
+  --secondary-color: #555;   /* 보조 색상은 짙은 회색으로 */
+  --accent-color: #0d47a1;  /* 강조 색상 통일 */
+  --text-color: #212121;     /* 거의 검은색에 가까운 텍스트 */
+  --text-light: #616161;   /* 밝은 텍스트 */
+  --bg-light: #f8f9fa;      /* 매우 연한 회색 배경 */
+  --border-color: #dee2e6;  /* 경계선 색상 */
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  line-height: 1.6;
+  /* 변경: 가독성을 위해 세리프 폰트로 변경 */
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  line-height: 1.7; /* 줄 간격 약간 넓힘 */
   color: var(--text-color);
   background: #ffffff;
 }
 
-.container { max-width: 1100px; margin: 0 auto; padding: 0 2rem; }
+.container {
+  /* 변경: 본문 폭을 줄여 논문처럼 보이게 함 */
+  max-width: 850px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
 
 /* Header */
 .site-header {
-  background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-  color: white;
-  padding: 2rem 0 1.5rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-}
-
-.site-header h1 {
-  margin: 0 0 0.5rem 0;
-  font-size: 2rem;
-  font-weight: 700;
+  /* 변경: 그라데이션 배경과 그림자 제거, 단순한 하단 테두리로 변경 */
+  background: #ffffff;
+  color: var(--text-color);
+  padding: 1.5rem 0;
+  border-bottom: 1px solid var(--border-color);
+  box-shadow: none;
 }
 
 .site-header h1 a {
-  color: white;
-  text-decoration: none;
-  transition: opacity 0.2s;
+  /* 변경: 헤더 배경이 밝아졌으므로 텍스트 색상 변경 */
+  color: var(--text-color);
 }
 
-.site-header h1 a:hover { opacity: 0.9; }
+.site-header h1 a:hover { opacity: 0.8; }
 
 .site-header p {
-  color: rgba(255, 255, 255, 0.9);
-  font-size: 1.1rem;
+  /* 변경: 텍스트 색상 변경 */
+  color: var(--text-light);
+  font-size: 1rem;
   margin-bottom: 1rem;
 }
 
@@ -56,31 +66,35 @@ body {
 }
 
 .site-header nav a {
-  color: white;
+  /* 변경: 배경과 그림자 효과 제거 */
+  color: var(--primary-color);
   text-decoration: none;
   font-weight: 500;
-  padding: 0.5rem 1rem;
-  border-radius: 6px;
-  background: rgba(255, 255, 255, 0.15);
+  padding: 0.2rem 0;
+  border-radius: 0;
+  background: none;
   transition: all 0.2s;
 }
 
 .site-header nav a:hover {
-  background: rgba(255, 255, 255, 0.25);
-  transform: translateY(-2px);
+  background: none;
+  transform: none; /* 변경: 마우스오버 시 움직임 제거 */
+  text-decoration: underline;
 }
 
 /* Main Content */
 main { padding: 3rem 0; min-height: 60vh; }
 
 /* Hero Section */
+/* 변경: Hero 섹션의 화려한 배경과 효과 제거 */
 .hero {
-  text-align: center;
-  padding: 3rem 0 2rem;
+  text-align: left; /* 논문처럼 좌측 정렬 */
+  padding: 2rem 0;
   margin-bottom: 3rem;
-  background: linear-gradient(135deg, #f0f9ff 0%, #faf5ff 100%);
-  border-radius: 16px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  background: none;
+  border-radius: 0;
+  box-shadow: none;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .hero h2 {
@@ -89,43 +103,38 @@ main { padding: 3rem 0; min-height: 60vh; }
   color: var(--text-color);
   font-weight: 700;
   line-height: 1.3;
+  border-bottom: none; /* h2 기본 테두리 제거 (hero 내부에서는) */
 }
 
 .hero p {
   font-size: 1.15rem;
   color: var(--text-light);
   margin-bottom: 1.5rem;
-  max-width: 800px;
-  margin-left: auto;
-  margin-right: auto;
+  max-width: 100%; /* container에 맞춰짐 */
 }
 
+/* 변경: Badge 스타일 단순화 */
 .badges {
-  display: flex;
-  gap: 1rem;
-  justify-content: center;
-  flex-wrap: wrap;
+  justify-content: flex-start;
   margin-top: 1.5rem;
 }
 
 .badges a {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.7rem 1.5rem;
+  padding: 0.5rem 1rem;
   background: white;
   color: var(--primary-color);
   text-decoration: none;
-  border-radius: 8px;
+  border-radius: 4px; /* 둥근 모서리 최소화 */
   font-weight: 600;
-  font-size: 1rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: none; /* 그림자 제거 */
   transition: all 0.2s;
-  border: 2px solid transparent;
+  border: 1px solid var(--border-color);
 }
 
 .badges a:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+  transform: none; /* 움직임 제거 */
+  box-shadow: none;
+  background-color: var(--bg-light);
   border-color: var(--primary-color);
 }
 
@@ -136,7 +145,8 @@ h2 {
   color: var(--text-color);
   font-weight: 700;
   padding-bottom: 0.5rem;
-  border-bottom: 3px solid var(--primary-color);
+  /* 변경: 하단 테두리를 더 얇고 단순하게 */
+  border-bottom: 1px solid var(--border-color);
 }
 
 h3 {
@@ -147,27 +157,19 @@ h3 {
 }
 
 p { margin: 1rem 0; }
-
-ul, ol {
-  margin: 1rem 0;
-  padding-left: 2rem;
-}
-
-li {
-  margin: 0.5rem 0;
-  line-height: 1.7;
-}
-
-strong { font-weight: 600; color: var(--text-color); }
+ul, ol { margin: 1rem 0; padding-left: 2rem; }
+li { margin: 0.5rem 0; line-height: 1.7; }
+strong { font-weight: 700; color: var(--text-color); }
 
 /* Code */
 code {
   background: var(--bg-light);
-  padding: 0.2rem 0.5rem;
-  border-radius: 4px;
-  font-family: 'Monaco', 'Menlo', monospace;
+  padding: 0.2rem 0.4rem;
+  border-radius: 3px;
+  /* 변경: 코드용 고정폭 폰트 지정 */
+  font-family: 'Courier New', Courier, monospace;
   font-size: 0.9em;
-  color: var(--secondary-color);
+  color: #333;
   border: 1px solid var(--border-color);
 }
 
@@ -175,26 +177,22 @@ pre {
   background: var(--bg-light);
   padding: 1.5rem;
   overflow: auto;
-  border-radius: 10px;
+  border-radius: 4px; /* 둥근 모서리 최소화 */
   margin: 1.5rem 0;
   border: 1px solid var(--border-color);
   line-height: 1.5;
 }
 
-pre code {
-  background: none;
-  padding: 0;
-  border: none;
-  color: var(--text-color);
-}
+pre code { background: none; padding: 0; border: none; }
 
 /* Images */
 img {
   max-width: 100%;
   height: auto;
-  border-radius: 12px;
+  border-radius: 4px; /* 둥근 모서리 최소화 */
   margin: 2rem 0;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: none; /* 그림자 제거 */
+  border: 1px solid var(--border-color);
 }
 
 /* Tables */
@@ -202,14 +200,16 @@ table {
   width: 100%;
   border-collapse: collapse;
   margin: 2rem 0;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
+  box-shadow: none; /* 그림자 제거 */
+  border-radius: 0;
   overflow: hidden;
+  border: 1px solid var(--border-color);
 }
 
 thead {
-  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-  color: white;
+  /* 변경: 그라데이션 제거, 단순한 배경색으로 변경 */
+  background: var(--bg-light);
+  color: var(--text-color);
 }
 
 th, td {
@@ -218,20 +218,9 @@ th, td {
   border-bottom: 1px solid var(--border-color);
 }
 
-th {
-  font-weight: 600;
-  font-size: 0.95rem;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-tbody tr:hover {
-  background: var(--bg-light);
-}
-
-tbody tr:last-child td {
-  border-bottom: none;
-}
+th { font-weight: 700; text-transform: none; }
+tbody tr:hover { background: var(--bg-light); }
+tbody tr:last-child td { border-bottom: none; }
 
 /* Grid & Cards */
 .grid {
@@ -241,18 +230,19 @@ tbody tr:last-child td {
   margin: 2rem 0;
 }
 
+/* 변경: 카드 스타일 단순화 */
 .card {
   background: white;
   border: 1px solid var(--border-color);
-  border-radius: 12px;
+  border-radius: 4px;
   padding: 1.5rem;
   transition: all 0.2s;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: none;
 }
 
 .card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  transform: none;
+  box-shadow: none;
   border-color: var(--primary-color);
 }
 
@@ -265,10 +255,7 @@ tbody tr:last-child td {
   text-align: center;
 }
 
-.site-footer p {
-  color: var(--text-light);
-  font-size: 0.9rem;
-}
+.site-footer p { color: var(--text-light); font-size: 0.9rem; }
 
 /* Links */
 a {
@@ -289,6 +276,6 @@ a:hover {
   .hero p { font-size: 1rem; }
   .site-header h1 { font-size: 1.5rem; }
   h2 { font-size: 1.5rem; }
-  .badges { flex-direction: column; }
+  .badges { flex-direction: column; align-items: flex-start; }
   .grid { grid-template-columns: 1fr; }
 }
