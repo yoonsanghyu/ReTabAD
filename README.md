@@ -17,7 +17,7 @@ This project requires `Docker` and the `NVIDIA Container Toolkit` to be installe
 
 1.  **Clone the Repository**
     ```sh
-    git clone [https://github.com/carrtesy/ReTabAD.git](https://github.com/carrtesy/ReTabAD.git)
+    git clone [https://github.com/yoonsanghyu/ReTabAD.git](https://github.com/yoonsanghyu/ReTabAD.git)
     cd ReTabAD
     ```
 
