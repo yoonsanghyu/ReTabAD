@@ -1,0 +1,13 @@
+
+.container { max-width: 900px; margin: 0 auto; padding: 1rem; }
+.site-header { padding: 1.5rem 0; border-bottom: 1px solid #e5e5e5; }
+.site-header h1 { margin: 0; font-size: 1.6rem; }
+.site-header nav a { margin-right: 1rem; text-decoration: none; }
+.site-footer { margin-top: 3rem; padding: 1rem 0; border-top: 1px solid #e5e5e5; font-size: 0.9rem; color: #666; }
+.hero { margin: 2rem 0 1rem; }
+.badges a { margin-right: .5rem; }
+code { background: #f6f8fa; padding: .2rem .4rem; border-radius: 4px; }
+pre { background: #f6f8fa; padding: 1rem; overflow: auto; border-radius: 6px; }
+img { max-width: 100%; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1rem; }
+.card { border: 1px solid #e5e5e5; border-radius: 10px; padding: 1rem; }

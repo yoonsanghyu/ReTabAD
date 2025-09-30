@@ -1,0 +1,27 @@
+
+title: ReTabAD
+description: Tabular Anomaly Detection with Retrieval-Augmented Deep Learning
+# For project sites (username.github.io/<repo>), set baseurl to "/<repo>"
+baseurl: "/ReTabAD"
+url: "https://yoonsanghyu.github.io" # change if using a custom domain
+theme: jekyll-theme-cayman
+
+# Build settings
+markdown: kramdown
+kramdown:
+  input: GFM
+
+# Optional: navigation links (used by simple header in default layout below)
+nav:
+  - title: Home
+    url: /
+  - title: Paper
+    url: /paper
+  - title: Dataset
+    url: /dataset
+  - title: Usage
+    url: /usage
+  - title: Results
+    url: /results
+  - title: Cite
+    url: /cite

@@ -1,0 +1,32 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ page.title }} | {{ site.title }}</title>
+  <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/custom.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <h1><a href="{{ site.baseurl }}/">{{ site.title }}</a></h1>
+      <p>{{ site.description }}</p>
+      <nav>
+        {% for item in site.nav %}
+          <a href="{{ site.baseurl }}{{ item.url }}">{{ item.title }}</a>
+        {% endfor %}
+      </nav>
+    </div>
+  </header>
+  <main class="container">
+    {{ content }}
+  </main>
+  <footer class="site-footer">
+    <div class="container">
+      <p>© {{ "now" | date: "%Y" }} {{ site.title }} · Built with GitHub Pages</p>
+    </div>
+  </footer>
+  <script src="{{ site.baseurl }}/assets/js/custom.js"></script>
+</body>
+</html>
