@@ -4,12 +4,12 @@ description: Tabular Anomaly Detection with Retrieval-Augmented Deep Learning
 # For project sites (username.github.io/<repo>), set baseurl to "/<repo>"
 baseurl: "/ReTabAD"
 url: "https://yoonsanghyu.github.io" # change if using a custom domain
-theme: jekyll-theme-cayman
 
 # Build settings
 markdown: kramdown
 kramdown:
   input: GFM
+  hard_wrap: false
 
 # Optional: navigation links (used by simple header in default layout below)
 nav:
