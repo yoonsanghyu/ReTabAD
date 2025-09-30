@@ -80,13 +80,12 @@ optuna-dashboard sqlite:///exp_db/retab.sqlite3
 
 ## 📊 ReTabAD Benchmark Datasets
 
-ReTabAD includes **24 diverse datasets** spanning multiple domains:
+ReTabAD includes **20 diverse datasets** spanning multiple domains:
 
 | Dataset Name | Datapoints | Columns | Normal Count | Anomaly Count | Anomaly Ratio (%) |
 | :--- | ---:| ---:| ---:| ---:| ---:|
 | automobile | 159 | 25 | 117 | 42 | 26.42 |
 | backdoor | 29,223 | 42 | 29,113 | 110 | 0.38 |
-| breastw | 666 | 9 | 444 | 222 | 33.33 |
 | campaign | 7,842 | 16 | 6,056 | 1,786 | 22.77 |
 | cardiotocography | 2,126 | 21 | 1,655 | 471 | 22.15 |
 | census | 50,000 | 41 | 47,121 | 2,879 | 5.76 |
@@ -94,14 +93,10 @@ ReTabAD includes **24 diverse datasets** spanning multiple domains:
 | cirrhosis | 247 | 17 | 165 | 82 | 33.20 |
 | covertype | 50,000 | 12 | 49,520 | 480 | 0.96 |
 | credit | 30,000 | 23 | 23,364 | 6,636 | 22.12 |
-| ecoli | 214 | 7 | 143 | 71 | 33.18 |
 | equip | 7,672 | 6 | 6,905 | 767 | 10.00 |
 | gallstone | 241 | 38 | 161 | 80 | 33.20 |
 | glass | 214 | 9 | 163 | 51 | 23.83 |
 | glioma | 730 | 23 | 487 | 243 | 33.29 |
-| hepatitis | 80 | 19 | 67 | 13 | 16.25 |
-| lymphography | 148 | 18 | 142 | 6 | 4.05 |
-| mushroom | 6,312 | 22 | 4,208 | 2,104 | 33.33 |
 | quasar | 50,000 | 8 | 40,520 | 9,480 | 18.96 |
 | seismic | 2,584 | 18 | 2,414 | 170 | 6.58 |
 | stroke | 4,909 | 10 | 4,700 | 209 | 4.26 |

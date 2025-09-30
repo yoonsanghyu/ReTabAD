@@ -19,7 +19,7 @@ layout: default
   <img src="{{ site.baseurl }}/assets/img/overview.png" alt="ReTabAD Overview" style="width: 60%; max-width: 100%;">
 </div>
 
-In tabular anomaly detection (AD), textual semantics often carry critical signals, as the definition of an anomaly is closely tied to domain-specific context. However, existing benchmarks provide only raw data points without semantic context, overlooking rich textual metadata such as feature descriptions and domain knowledge that experts rely on in practice. This limitation restricts research flexibility and prevents models from fully leveraging domain knowledge for detection. ReTabAD addresses this gap by Restoring textual semantics to enable context-aware Tabular AD research. We provide (1) 24 carefully curated tabular datasets enriched with structured textual metadata, together with implementations of state-of-the-art AD algorithms—including classical, deep learning, and LLM-based approaches—and (2) a zero-shot LLM framework that leverages semantic context without task-specific training, establishing a strong baseline for future research. Furthermore, this work provides insights into the role and utility of textual metadata in AD through experiments and analysis. Results show that semantic context improves detection performance and enhances interpretability by supporting domain-aware reasoning. These findings establish ReTabAD as a benchmark for systematic exploration of context-aware AD.
+In tabular anomaly detection (AD), textual semantics often carry critical signals, as the definition of an anomaly is closely tied to domain-specific context. However, existing benchmarks provide only raw data points without semantic context, overlooking rich textual metadata such as feature descriptions and domain knowledge that experts rely on in practice. This limitation restricts research flexibility and prevents models from fully leveraging domain knowledge for detection. ReTabAD addresses this gap by Restoring textual semantics to enable context-aware Tabular AD research. We provide (1) 20 carefully curated tabular datasets enriched with structured textual metadata, together with implementations of state-of-the-art AD algorithms—including classical, deep learning, and LLM-based approaches—and (2) a zero-shot LLM framework that leverages semantic context without task-specific training, establishing a strong baseline for future research. Furthermore, this work provides insights into the role and utility of textual metadata in AD through experiments and analysis. Results show that semantic context improves detection performance and enhances interpretability by supporting domain-aware reasoning. These findings establish ReTabAD as a benchmark for systematic exploration of context-aware AD.
 
 ---
 
@@ -57,14 +57,14 @@ Traditional tabular AD benchmarks exhibit a **fundamental disconnect from indust
 
 ## 📊 Benchmark Statistics
 
-ReTabAD includes **24 diverse datasets** spanning multiple domains:
+ReTabAD includes **20 diverse datasets** spanning multiple domains:
 
 | Metric | Range |
 |--------|-------|
-| **Datasets** | 24 real-world scenarios |
-| **Data Points** | 80 - 50,000 per dataset |
+| **Datasets** | 20 real-world scenarios |
+| **Data Points** | 159 - 50,000 per dataset |
 | **Features** | 6 - 42 columns |
-| **Anomaly Ratio** | 0.38% - 33.33% |
+| **Anomaly Ratio** | 0.38% - 33.29% |
 
 ---
 
