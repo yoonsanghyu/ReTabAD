@@ -26,4 +26,3 @@ hyperparameters:
     model:
       type: categorical
       grid: [smolLM, smolLM360]
-

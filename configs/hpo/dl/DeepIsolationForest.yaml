@@ -5,7 +5,7 @@ exp:
 
 study:
   direction: maximize
-  storage: "sqlite:///exp_db/retab.sqlite3"
+  storage: "sqlite:///exp_db/retab_DeepIsolationForest.sqlite3"
   n_trials: 1000
 
 data_parameters:
@@ -14,6 +14,9 @@ data_parameters:
 
 model_parameters:
   bias: False
+  lr: 0.001 # it is for consistency, unused in this model (https://deepod.readthedocs.io/en/latest/generated/deepod.models.DeepIsolationForest.html#deepod.models.DeepIsolationForest)
+  act: ReLU
+  max_samples: 256
 
 hyperparameters:
   data_parameters:
@@ -25,30 +28,15 @@ hyperparameters:
       grid: [int, onehot]
   
   model_parameters:
-    lr:
-      type: categorical
-      grid: [0.001]
-    
-    act:
-      type: categorical
-      grid: ["ReLU", "LeakyReLU", "Tanh"]
-    
     rep_dim:
       type: categorical
-      grid: [64, 128, 256, 512]
-    
+      grid: [32, 128, 256]
     hidden_dims:
       type: categorical
-      grid: ["100,50", "200,100", "300,150", "128,64", "256,128", "512,256"]
-    
+      grid: ["100,50", "256,128", "512,256"]
     n_ensemble:
       type: categorical
-      grid: [20, 50, 100, 200]
-    
+      grid: [50, 200]
     n_estimators:
       type: categorical
-      grid: [3, 6, 10, 15]
-    
-    max_samples:
-      type: categorical
-      grid: [128, 256, 512, 1024]
+      grid: [6, 10]

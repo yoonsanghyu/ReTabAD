@@ -5,7 +5,7 @@ exp:
 
 study:
   direction: maximize
-  storage: "sqlite:///exp_db/retab.sqlite3"
+  storage: "sqlite:///exp_db/retab_GOAD.sqlite3"
   n_trials: 1000
 
 data_parameters:
@@ -14,6 +14,13 @@ data_parameters:
 
 model_parameters:
   bias: False
+  act: LeakyReLU
+  alpha: 0.1
+  margin: 1.0
+  n_layers: 5
+  n_trans: 256
+  hidden_dim: 8
+  n_trans: 256
 
 hyperparameters:
   data_parameters:
@@ -27,26 +34,10 @@ hyperparameters:
   model_parameters:  
     lr: 
       type: categorical
-      grid: [0.0001, 0.0005, 0.001, 0.005]
-    act:
-      type: categorical
-      grid: ["ReLU", "LeakyReLU", "Tanh"]
-    # GOAD 핵심 파라미터들
-    n_trans:
-      type: categorical
-      grid: [128, 256, 512, 1024]
+      grid: [0.001, 0.0001]
     trans_dim:
       type: categorical
-      grid: [16, 32, 64, 128]
-    alpha:
+      grid: [32, 128]
+    n_trans:
       type: categorical
-      grid: [0.01, 0.05, 0.1, 0.2, 0.5]
-    margin:
-      type: categorical
-      grid: [0.5, 1.0, 1.5, 2.0]
-    hidden_dim:
-      type: categorical
-      grid: [4, 8, 16, 32]
-    n_layers:
-      type: categorical
-      grid: [3, 5, 7, 9]
+      grid: [256, 512]

@@ -5,7 +5,7 @@ exp:
 
 study:
   direction: maximize
-  storage: "sqlite:///exp_db/retab.sqlite3"
+  storage: "sqlite:///exp_db/retab_ocsvm.sqlite3"
   n_trials: 1000
 
 data_parameters:

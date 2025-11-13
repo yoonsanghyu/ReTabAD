@@ -5,14 +5,19 @@ exp:
 
 study:
   direction: maximize
-  storage: "sqlite:///exp_db/retab.sqlite3"
+  storage: "sqlite:///exp_db/retab_SLAD.sqlite3"
   n_trials: 1000
 
 data_parameters:
   serialize: False
   batch_size: 128
 
-model_parameters: {}
+model_parameters:
+  act: LeakyReLU
+  n_slad_ensemble: 20
+  magnify_factor: 200
+  subspace_pool_size: 50
+  distribution_size: 10
 
 hyperparameters:
   data_parameters:
@@ -26,32 +31,10 @@ hyperparameters:
   model_parameters:
     lr:
       type: categorical
-      grid: [0.0001, 0.0005, 0.001, 0.005, 0.01]
-    
-    act:
-      type: categorical
-      grid: ["ReLU", "LeakyReLU", "Tanh"]
-    
+      grid: [0.001, 0.0001]
     hidden_dims:
       type: categorical
-      grid: [50, 100, 200, 300, 500]
-    
-    distribution_size:
-      type: categorical
-      grid: [5, 10, 15, 20, 25]
-    
-    n_slad_ensemble:
-      type: categorical
-      grid: [10, 20, 30, 50]
-    
-    subspace_pool_size:
-      type: categorical
-      grid: [20, 50, 100, 200]
-    
-    magnify_factor:
-      type: categorical
-      grid: [50, 100, 200, 300, 500]
-    
+      grid: [100, 200]
     n_unified_features:
       type: categorical
-      grid: [64, 128, 256, 512]
+      grid: [128, 256]

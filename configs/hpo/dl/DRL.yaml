@@ -5,7 +5,7 @@ exp:
 
 study:
   direction: maximize
-  storage: "sqlite:///exp_db/retab.sqlite3"
+  storage: "sqlite:///exp_db/retab_DRL.sqlite3"
   n_trials: 1000
 
 data_parameters:
@@ -14,7 +14,6 @@ data_parameters:
 
 model_parameters:
   epochs: 200
-  learning_rate: 0.05
   sche_gamma: 0.98
   en_nlayers: 3
   de_nlayers: 3
@@ -38,7 +37,7 @@ hyperparameters:
   model_parameters:
     learning_rate:
       type: categorical
-      grid: [0.1, 0.05, 0.01, 0.005, 0.001, 0.0005, 0.0001]
+      grid: [0.005, 0.001, 0.0005, 0.0001]
     input_info_ratio:
       type: categorical
       grid: [0.05, 0.1, 0.15]

@@ -5,7 +5,7 @@ exp:
 
 study:
   direction: maximize
-  storage: "sqlite:///exp_db/retab.sqlite3"
+  storage: "sqlite:///exp_db/retab_RCA.sqlite3"
   n_trials: 1000
 
 data_parameters:
@@ -14,6 +14,10 @@ data_parameters:
 
 model_parameters:
   bias: False
+  act: LeakyReLU
+  alpha: 0.5
+  anom_ratio: 0.02
+  inference_ensemble: 10
 
 hyperparameters:
   data_parameters:
@@ -27,25 +31,10 @@ hyperparameters:
   model_parameters:  
     lr: 
       type: categorical
-      grid: [0.0001, 0.0005, 0.001, 0.005]
+      grid: [0.005, 0.001, 0.0005, 0.0001]
     rep_dim: 
       type: categorical
-      grid: [32, 64, 128, 256]
+      grid: [32, 128, 256]
     hidden_dims:
       type: categorical
       grid: ["100,50", "128,64", "256,128", "512,256,128"]
-    act:
-      type: categorical
-      grid: ["ReLU", "LeakyReLU", "Tanh"]
-    alpha:
-      type: categorical
-      grid: [0.1, 0.3, 0.5, 0.7, 0.9]
-    anom_ratio:
-      type: categorical
-      grid: [0.01, 0.02, 0.05, 0.1]
-    dropout:
-      type: categorical
-      grid: [0.0, 0.2, 0.5, 0.7]
-    inference_ensemble:
-      type: categorical
-      grid: [5, 10, 15, 20]

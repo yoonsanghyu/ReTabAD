@@ -5,37 +5,36 @@ exp:
 
 study:
   direction: maximize
-  storage: "sqlite:///exp_db/retab_NeuTraL.sqlite3"
+  storage: "sqlite:///exp_db/retab_RDP.sqlite3"
   n_trials: 1000
 
 data_parameters:
-  serialize: False
+  scaling_type: standard
+  cat_encoding: onehot
   batch_size: 64
 
 model_parameters:
-  bias: False
-  act: LeakyReLU
-  trans_type: residual
-  temp: 0.1
-  trans_hidden_dims: 50
-  n_trans: 11
+  lr: 1.0e-3
+  rep_dim: 128
+  hidden_dims: "100,50"
 
 hyperparameters:
   data_parameters:
-    scaling_type:
+    scaling_type: 
       type: categorical
       grid: [standard, minmax]
     cat_encoding:
       type: categorical
       grid: [int, onehot]
-  
-  model_parameters:
-    lr:
+      
+  model_parameters:  
+    lr: 
       type: categorical
       grid: [0.001, 0.0001]
-    rep_dim:
-      type: categorical
-      grid: [32, 128]
     hidden_dims:
       type: categorical
       grid: ["100,50", "256,128"]
+    rep_dim:
+      type: categorical
+      grid: [32, 128]
+    

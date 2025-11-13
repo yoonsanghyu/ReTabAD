@@ -5,7 +5,7 @@ exp:
 
 study:
   direction: maximize
-  storage: "sqlite:///exp_db/retab.sqlite3"
+  storage: "sqlite:///exp_db/retab_KNN.sqlite3"
   n_trials: 1000
 
 data_parameters:
@@ -15,6 +15,9 @@ data_parameters:
 model_parameters:
   algorithm: auto
   leaf_size: 30
+  metric: minkowski
+  p: 2
+  method: largest
 
 hyperparameters:
   data_parameters:
@@ -29,19 +32,7 @@ hyperparameters:
     n_neighbors:
       type: categorical
       grid: [10, 20, 30, 50]
-    
-    method:
-      type: categorical
-      grid: [largest, mean, median]
-    
-    metric:
-      type: categorical
-      grid: [euclidean, manhattan, cosine]
-    
+
     contamination:
       type: categorical
       grid: [0.01, 0.05, 0.1]
-    
-    p:
-      type: categorical
-      grid: [1, 2]

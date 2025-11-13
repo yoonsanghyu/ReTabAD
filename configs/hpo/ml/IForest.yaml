@@ -5,27 +5,23 @@ exp:
 
 study:
   direction: maximize
-  storage: "sqlite:///exp_db/retab.sqlite3"
+  storage: "sqlite:///exp_db/retab_IForest.sqlite3"
   n_trials: 1000
 
 data_parameters:
   serialize: False
   batch_size: 64
+  scaling_type: minmax
+  cat_encoding: int
 
 model_parameters:
   max_features: 1.0
   bootstrap: False
   random_state: 42
+  max_samples: auto
+
 
 hyperparameters:
-  data_parameters:
-    scaling_type:
-      type: categorical
-      grid: [standard, minmax]
-    cat_encoding:
-      type: categorical
-      grid: [int, onehot]
-  
   model_parameters:
     n_estimators:
       type: categorical
@@ -34,7 +30,3 @@ hyperparameters:
     contamination:
       type: categorical
       grid: [0.05, 0.1, 0.15, 0.2, 0.25, 0.3]
-    
-    max_samples:
-      type: categorical
-      grid: [auto, 0.5, 0.7, 1.0]
