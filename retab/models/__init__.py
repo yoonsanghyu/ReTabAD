@@ -3,6 +3,7 @@ from .pyod_trainer.trainer import Trainer as PyODTrainer
 from .deepod_trainer.trainer import Trainer as DeepODTrainer
 from .mcm_trainer.trainer import Trainer as MCMTrainer
 from .drl_trainer.trainer import Trainer as DRLTrainer
+from .disentad_trainer.trainer import Trainer as DisentADTrainer
 from .anollm_trainer.trainer import Trainer as AnoLLMTrainer
 from .zeroshotllm.trainer import Trainer as ZeroShotLLMTrainer
 
@@ -24,12 +25,16 @@ TRAINERS = {
     "NeuTraL": DeepODTrainer,
     "SLAD": DeepODTrainer,
     "DeepIsolationForest": DeepODTrainer,
+    "ICL": DeepODTrainer,
 
     # mcm
     "MCM": MCMTrainer,
 
     # drl
     "DRL": DRLTrainer,
+
+    # DisentAD
+    "DisentAD": DisentADTrainer,
 
     # anollm
     "AnoLLM": AnoLLMTrainer,

@@ -1,0 +1,15 @@
+exp:
+  device: cuda
+  checkpoint_path: ./checkpoints/default
+  result_path: ./results/default
+
+data_parameters:
+  scaling_type: standard
+  cat_encoding: onehot
+  batch_size: 64
+
+model_parameters:
+  lr: 0.001
+  rep_dim: 128
+  hidden_dims: "100,50"
+  act: "LeakyReLU"

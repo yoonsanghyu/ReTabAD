@@ -3,6 +3,8 @@ from .tabular_dataset import TabularDataset
 from .serialized_dataset import SerializedTabularDataset, DataCollator
 
 DATA_LIST = [
+'automobile',
+'churn',
 'cirrhosis', 
 'gallstone', 
 'glioma', 
@@ -14,7 +16,6 @@ DATA_LIST = [
 'vertebral', 
 'cardiotocography', 
 'cardio', 
-'hepatitis', 
 'yeast', 
 'lymphography', 
 'breastw', 
@@ -22,7 +23,6 @@ DATA_LIST = [
 'backdoor', 
 'campaign', 
 'seismic', 
-'ecoli', 
 'stroke', 
 'credit', 
 'quasar', 

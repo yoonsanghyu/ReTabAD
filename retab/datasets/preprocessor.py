@@ -103,12 +103,11 @@ class Preprocessor:
         train_idx = normal_idx[:num_train]
         test_idx = np.concatenate([normal_idx[num_train:], anomaly_idx])        
 
-        nan_mask = self.X.notnull().astype(int)
-
-        X_train, y_train = split_data(self.X, self.y, nan_mask, train_idx)
-        X_test, y_test = split_data(self.X, self.y, nan_mask, test_idx)
-
         if self.serialize:
+            nan_mask = self.X.notnull().astype(int)
+            X_train, y_train = split_data(self.X, self.y, nan_mask, train_idx)
+            X_test, y_test = split_data(self.X, self.y, nan_mask, test_idx)
+            
             # Also split original data for result saving
             nan_mask_original = self.X_original.notnull().astype(int)
             X_train_original, _ = split_data(self.X_original, self.y, nan_mask_original, train_idx)
@@ -130,16 +129,6 @@ class Preprocessor:
             }
             return train_dict, test_dict
 
-        self.X_train, self.y_train = X_train, y_train
-        self.X_test, self.y_test = X_test, y_test
-        self.nfeatures = self.X_train["data"].shape[1]
-
-        self.cat_idxs, self.con_idxs = compute_feature_indices(
-            self.X, self.cat_encoding, self.categorical_columns, self.continuous_columns
-        )
-
-        self.scaling_params = self._compute_scaling_stats()
-        
         if self.cat_encoding == "onehot":
             self._encode_onehot()
         elif self.cat_encoding == "int":
@@ -150,8 +139,21 @@ class Preprocessor:
             self._encode_txt_emb()
         else:
             raise NotImplementedError(f"Unsupported cat_encoding: {self.cat_encoding}")
+        
+        nan_mask = self.X.notnull().astype(int)
+        X_train, y_train = split_data(self.X, self.y, nan_mask, train_idx)
+        X_test, y_test = split_data(self.X, self.y, nan_mask, test_idx)
 
+        self.X_train, self.y_train = X_train, y_train
+        self.X_test, self.y_test = X_test, y_test
+        self.nfeatures = self.X_train["data"].shape[1]
 
+        self.cat_idxs, self.con_idxs = compute_feature_indices(
+            self.X, self.cat_encoding, self.categorical_columns, self.continuous_columns
+        )
+
+        self.scaling_params = self._compute_scaling_stats()
+        
         train_dict = self._make_dataset(self.X_train, self.y_train)
         test_dict = self._make_dataset(self.X_test, self.y_test)
 

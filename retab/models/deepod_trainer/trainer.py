@@ -2,7 +2,7 @@ import torch
 import pickle
 
 from addict import Dict
-from deepod.models.tabular import DeepSVDD, REPEN, RDP, RCA, GOAD, NeuTraL, SLAD, DeepIsolationForest
+from deepod.models.tabular import DeepSVDD, REPEN, RDP, RCA, GOAD, NeuTraL, SLAD, DeepIsolationForest, ICL
 
 from retab.utils import get_summary_metrics
 from retab.datasets import Preprocessor
@@ -18,6 +18,7 @@ DeepOD_MODELS = {
     "NeuTraL": NeuTraL,
     "SLAD": SLAD,
     "DeepIsolationForest": DeepIsolationForest,
+    "ICL": ICL,
 }
 
 
