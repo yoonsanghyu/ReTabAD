@@ -116,7 +116,8 @@ def main():
         direction=cfg.study.direction,
         storage=cfg.study.storage,
         study_name=study_name,
-        sampler=optuna.samplers.GridSampler(search_space),     
+        sampler=optuna.samplers.GridSampler(search_space),
+        load_if_exists=True
     )
     
     study.optimize(lambda trial: objective(trial, cfg, meta_info), n_trials=cfg.study.n_trials)
