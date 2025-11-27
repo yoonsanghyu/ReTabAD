@@ -74,7 +74,7 @@ def main():
     print(metrics)
 
     # save results
-    result_path = os.path.join(cfg.exp.result_path, meta_info.data_name, meta_info.model_name)
+    result_path = os.path.join(cfg.exp.result_path, meta_info.data_name, meta_info.model_name, str(meta_info.seed))
     os.makedirs(result_path, exist_ok=True)
     with open(os.path.join(result_path, f"{meta_info.exp_id}.json"), 'w') as f:
         json.dump(metrics, f, indent=4)

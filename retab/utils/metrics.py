@@ -40,12 +40,36 @@ def get_best_f1_threshold(gt, anomaly_scores):
     return best_threshold
 
 
+def get_adaptive_f1(y_true, anomaly_scores):
+    """
+    Calculate threshold-adaptive F1-Score by setting threshold such that
+    the number of predicted anomalies matches the true anomaly count.
+    """
+    n_true_anomalies = int(np.sum(y_true))
+    n_total = len(y_true)
+ 
+    if n_true_anomalies == 0:
+        y_pred = np.zeros_like(y_true)
+    elif n_true_anomalies == n_total:
+        y_pred = np.ones_like(y_true)
+    else:
+        # threshold = np.partition(anomaly_scores, -n_true_anomalies)[-n_true_anomalies]
+        # y_pred = (anomaly_scores >= threshold).astype(int)
+        topk_idx = np.argpartition(anomaly_scores, -n_true_anomalies)[-n_true_anomalies:]
+        y_pred = np.zeros_like(y_true).astype(int)
+        y_pred[topk_idx] = 1
+ 
+    return f1_score(y_true, y_pred, zero_division=0)
+
+
 def get_summary_metrics(y_true, y_pred, threshold=None):
     f1 = get_f1(y_true, y_pred, threshold)
+    f1_adaptive = get_adaptive_f1(y_true, y_pred)
     auroc = get_auroc(y_true, y_pred)
     auprc = get_auprc(y_true, y_pred)
     return {
         "f1": float(f1),
+        "f1_adaptive": float(f1_adaptive),
         "auroc": float(auroc),
         "auprc": float(auprc)
     }

@@ -27,7 +27,7 @@ class Trainer(BaseTrainer):
     @torch.no_grad()
     def evaluate(self):
         self.load()
-        scores = self.model.decision_function(self.testloader)
+        scores = self.model.decision_function(self.testloader).reshape(-1)
         metrics = get_summary_metrics(y_true=self.y_test, y_pred=scores)
         return metrics
     
