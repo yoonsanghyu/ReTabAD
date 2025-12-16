@@ -115,7 +115,7 @@ main { padding: 3rem 0; min-height: 60vh; }
 
 .hero p.authors {
   font-size: 1rem;
-  color: #6A0DAD; /* 자주색 */
+  color: #8a0808; /* 자주색 */
   margin-top: 0.75rem;
   margin-bottom: 0.5rem;
   text-align: center;
@@ -136,7 +136,7 @@ main { padding: 3rem 0; min-height: 60vh; }
   background: white;
   color: var(--primary-color);
   text-decoration: none;
-  border-radius: 4px; /* 둥근 모서리 최소화 */
+  border-radius: 20px; /* 둥근 모서리 */
   font-weight: 600;
   box-shadow: none; /* 그림자 제거 */
   transition: all 0.2s;
