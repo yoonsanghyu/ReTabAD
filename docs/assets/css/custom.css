@@ -29,7 +29,7 @@ body {
 
 .container {
   /* 변경: 본문 폭 조정 - 화면의 65% 사용 */
-  max-width: 50% !important;
+  max-width: 60% !important;
   margin: 0 auto;
   padding: 0 2rem;
 }
