@@ -5,7 +5,7 @@ layout: default
 
 <div class="hero">
   <h2>🤔 ReTabAD: A Benchmark for Restoring Semantic Context<br>in Tabular Anomaly Detection</h2>
-  <p class="authors">Sanghyu Yoon, Dongmin Kim, Suhee Yoon, Ye Seul Sim, Seungdong Yoa, Hye-Seung Cho, Soonyoung Lee, Hankook Lee, Woohyung Lim</p>
+  <p class="authors">Sanghyu Yoon, Dongmin Kim, Suhee Yoon, Ye Seul Sim, Seungdong Yoa,<br>Hye-Seung Cho, Soonyoung Lee, Hankook Lee, Woohyung Lim</p>
   <div class="badges">
     <a href="https://arxiv.org/pdf/2510.02060">📄 Paper</a>
     <a href="https://github.com/yoonsanghyu/ReTabAD">💻 Code</a>

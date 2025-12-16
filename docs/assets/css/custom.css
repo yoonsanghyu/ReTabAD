@@ -29,7 +29,7 @@ body {
 
 .container {
   /* 변경: 본문 폭 조정 - 화면의 65% 사용 */
-  max-width: 65% !important;
+  max-width: 50% !important;
   margin: 0 auto;
   padding: 0 2rem;
 }
@@ -115,7 +115,7 @@ main { padding: 3rem 0; min-height: 60vh; }
 
 .hero p.authors {
   font-size: 1rem;
-  color: var(--text-color);
+  color: #6A0DAD; /* 자주색 */
   margin-top: 0.75rem;
   margin-bottom: 0.5rem;
   text-align: center;
@@ -157,6 +157,7 @@ h2 {
   color: var(--text-color);
   font-weight: 700;
   padding-bottom: 0.5rem;
+  text-align: center;
   /* 변경: 하단 테두리를 더 얇고 단순하게 */
   border-bottom: 1px solid var(--border-color);
 }
