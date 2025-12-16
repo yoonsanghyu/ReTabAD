@@ -1,12 +1,10 @@
 /*
   논문/학술 스타일로 수정한 CSS
-  - 폰트: Inter 폰트 사용
+  - 폰트: Helvetica 폰트 사용
   - 색상: 그라데이션 및 화려한 색상 제거, 차분한 단색 위주로 변경
   - 레이아웃: 본문 폭을 줄여 텍스트에 집중하도록 조정
   - 효과: 그림자(box-shadow), 둥근 모서리(border-radius), 애니메이션 효과 최소화
 */
-
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 :root {
   /* 변경: 색상을 차분한 파란색과 회색 계열로 단순화 */
@@ -22,8 +20,8 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
-  /* 변경: Inter 폰트 적용 */
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  /* 변경: Helvetica 폰트 적용 */
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   line-height: 1.7; /* 줄 간격 약간 넓힘 */
   color: var(--text-color);
   background: #ffffff;
@@ -90,7 +88,7 @@ main { padding: 3rem 0; min-height: 60vh; }
 /* Hero Section */
 /* 변경: Hero 섹션의 화려한 배경과 효과 제거 */
 .hero {
-  text-align: left; /* 논문처럼 좌측 정렬 */
+  text-align: center; /* 논문처럼 중앙 정렬 */
   padding: 2rem 0;
   margin-bottom: 3rem;
   background: none;
@@ -127,7 +125,9 @@ main { padding: 3rem 0; min-height: 60vh; }
 
 /* 변경: Badge 스타일 단순화 */
 .badges {
-  justify-content: flex-start;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
   margin-top: 1.5rem;
 }
 
