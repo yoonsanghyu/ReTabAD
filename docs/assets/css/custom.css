@@ -28,8 +28,8 @@ body {
 }
 
 .container {
-  /* 변경: 본문 폭 조정 */
-  max-width: 1400px;
+  /* 변경: 본문 폭 조정 - 화면의 90% 사용 */
+  max-width: 90%;
   margin: 0 auto;
   padding: 0 2rem;
 }
