@@ -86,14 +86,18 @@ body {
 main { padding: 3rem 0; min-height: 60vh; }
 
 /* Hero Section */
-/* 변경: Hero 섹션의 화려한 배경과 효과 제거 */
+/* 변경: 학술적인 하늘색 배경 */
 .hero {
   text-align: center; /* 논문처럼 중앙 정렬 */
-  padding: 2rem 0;
+  padding: 3rem 0;
   margin-bottom: 3rem;
-  background: none;
+  background: #E8F4F8; /* 학술적인 연한 하늘색 */
   border-radius: 0;
   box-shadow: none;
+  margin-left: calc(-50vw + 50%);
+  margin-right: calc(-50vw + 50%);
+  padding-left: calc(50vw - 50%);
+  padding-right: calc(50vw - 50%);
 }
 
 .hero h2 {
@@ -114,7 +118,7 @@ main { padding: 3rem 0; min-height: 60vh; }
 
 .hero p.authors {
   font-size: 1rem;
-  color: #8a0808; /* 자주색 */
+  color: #000000;
   margin-top: 0.75rem;
   margin-bottom: 0.5rem;
   text-align: center;
