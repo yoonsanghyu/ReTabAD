@@ -5,6 +5,7 @@ layout: default
 
 <div class="hero">
   <h2>🤔 ReTabAD: A Benchmark for Restoring Semantic Context in Tabular Anomaly Detection</h2>
+  <p class="authors">Sanghyu Yoon, Dongmin Kim, Suhee Yoon, Ye Seul Sim, Seungdong Yoa, Hye-Seung Cho, Soonyoung Lee, Hankook Lee, Woohyung Lim</p>
   <p>We introduce ReTabAD, the first context-aware tabular anomaly detection benchmark, which provides semantically enriched datasets and a zero-shot LLM framework.</p>
   <div class="badges">
     <a href="https://arxiv.org/abs/XXXX.XXXXX">📄 Paper</a>
