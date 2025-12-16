@@ -156,18 +156,8 @@ h2 {
   margin: 2.5rem 0 1rem;
   color: var(--text-color);
   font-weight: 700;
-  padding-bottom: 1rem;
+  padding-bottom: 0.5rem;
   text-align: center;
-  position: relative;
-}
-
-h2::after {
-  content: '';
-  display: block;
-  width: 60px;
-  height: 2px;
-  background: var(--border-color);
-  margin: 0.5rem auto 0;
 }
 
 h3 {
@@ -288,6 +278,15 @@ a {
 a:hover {
   color: var(--secondary-color);
   text-decoration: underline;
+}
+
+/* Left align section */
+.left-align {
+  text-align: left;
+}
+
+.left-align h2 {
+  text-align: left;
 }
 
 /* Responsive */

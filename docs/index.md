@@ -91,8 +91,12 @@ See [Usage]({{ site.baseurl }}/usage) for detailed instructions.
 
 
 
+<div class="left-align">
+
 ## 📰 News
 
 - **2025-09-30**: Initial release of ReTabAD benchmark
 - **2025-09-30**: 20 datasets with semantic metadata published
 - **2025-09-30**: GitHub repository and documentation launched
+
+</div>
