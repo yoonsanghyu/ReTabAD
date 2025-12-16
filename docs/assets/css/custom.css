@@ -136,7 +136,7 @@ main { padding: 3rem 0; min-height: 60vh; }
   background: white;
   color: var(--primary-color);
   text-decoration: none;
-  border-radius: 20px; /* 둥근 모서리 */
+  border-radius: 30px; /* 더 둥근 모서리 */
   font-weight: 600;
   box-shadow: none; /* 그림자 제거 */
   transition: all 0.2s;
@@ -156,10 +156,18 @@ h2 {
   margin: 2.5rem 0 1rem;
   color: var(--text-color);
   font-weight: 700;
-  padding-bottom: 0.5rem;
+  padding-bottom: 1rem;
   text-align: center;
-  /* 변경: 하단 테두리를 더 얇고 단순하게 */
-  border-bottom: 1px solid var(--border-color);
+  position: relative;
+}
+
+h2::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 2px;
+  background: var(--border-color);
+  margin: 0.5rem auto 0;
 }
 
 h3 {
