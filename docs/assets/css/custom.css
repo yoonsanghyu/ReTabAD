@@ -28,8 +28,8 @@ body {
 }
 
 .container {
-  /* 변경: 본문 폭을 줄여 논문처럼 보이게 함 */
-  max-width: 850px;
+  /* 변경: 본문 폭 조정 */
+  max-width: 1100px;
   margin: 0 auto;
   padding: 0 2rem;
 }
