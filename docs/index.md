@@ -1,5 +1,5 @@
 ---
-title: 🤔 Home
+title: Home
 layout: default
 ---
 
@@ -35,15 +35,15 @@ In tabular anomaly detection (AD), textual semantics often carry critical signal
 <div class="grid">
   <div class="card">
     <h3>📚 Semantically-Rich Tabular AD Benchmark</h3>
-    <p>Tabular data paired with comprehensive JSON text metadata containing column descriptions, logical types, and characterizations of normal data.</p>
+    <p style="text-align: justify;">Tabular data paired with comprehensive JSON text metadata containing column descriptions, logical types, and characterizations of normal data.</p>
   </div>
   <div class="card">
     <h3>💡 Support SOTA Algorithms</h3>
-    <p>Unified pipeline enabling fair comparisons across traditional ML, deep learning, and modern LLM approaches.</p>
+    <p style="text-align: justify;">Unified pipeline enabling fair comparisons across traditional ML, deep learning, and modern LLM approaches.</p>
   </div>
   <div class="card">
     <h3>🚀 LLM Potential</h3>
-    <p>Demonstrates substantial performance improvements when models can leverage semantic information.</p>
+    <p style="text-align: justify;">Demonstrates substantial performance improvements when models can leverage semantic information.</p>
   </div>
 </div>
 
