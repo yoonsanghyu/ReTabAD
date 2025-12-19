@@ -66,7 +66,7 @@ Traditional tabular AD benchmarks exhibit a **fundamental disconnect from indust
 
 ReTabAD includes **20 diverse datasets** spanning multiple domains:
 
-<div style="width: 65%; margin: 0 auto; font-size: 0.85em;" markdown="1"> 
+<div style="width: 65%; margin: 0 auto; font-size: 0.7em;" markdown="1"> 
 
 | Dataset Name | Datapoints | Columns | Normal Count | Anomaly Count | Anomaly Ratio (%) |
 | :--- | ---:| ---:| ---:| ---:| ---:|
