@@ -66,6 +66,8 @@ Traditional tabular AD benchmarks exhibit a **fundamental disconnect from indust
 
 ReTabAD includes **20 diverse datasets** spanning multiple domains:
 
+<div style="width: 80%; margin: 0 auto;">
+
 | Dataset Name | Datapoints | Columns | Normal Count | Anomaly Count | Anomaly Ratio (%) |
 | :--- | ---:| ---:| ---:| ---:| ---:|
 | automobile | 159 | 25 | 117 | 42 | 26.42 |
@@ -88,6 +90,8 @@ ReTabAD includes **20 diverse datasets** spanning multiple domains:
 | wbc | 535 | 30 | 357 | 178 | 33.27 |
 | wine | 178 | 13 | 130 | 48 | 26.97 |
 | yeast | 1,484 | 8 | 1,389 | 95 | 6.40 |
+
+</div>
 
 
 
