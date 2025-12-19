@@ -34,15 +34,15 @@ In tabular anomaly detection (AD), textual semantics often carry critical signal
 
 <div class="grid">
   <div class="card">
-    <h3>📚 Semantically-Rich Tabular AD Benchmark</h3>
+    <h4>📚 Semantically-Rich Tabular AD Benchmark</h4>
     <p>Tabular data paired with comprehensive JSON text metadata containing column descriptions, logical types, and characterizations of normal data.</p>
   </div>
   <div class="card">
-    <h3>💡 Support SOTA Algorithms</h3>
+    <h4>💡 Support SOTA Algorithms</h4>
     <p>Unified pipeline enabling fair comparisons across traditional ML, deep learning, and modern LLM approaches.</p>
   </div>
   <div class="card">
-    <h3>🚀 LLM Potential</h3>
+    <h4>🚀 LLM Potential</h4>
     <p>Demonstrates substantial performance improvements when models can leverage semantic information.</p>
   </div>
 </div>
@@ -66,12 +66,28 @@ Traditional tabular AD benchmarks exhibit a **fundamental disconnect from indust
 
 ReTabAD includes **20 diverse datasets** spanning multiple domains:
 
-| Metric | Range |
-|--------|-------|
-| **Datasets** | 20 real-world scenarios |
-| **Data Points** | 159 - 50,000 per dataset |
-| **Features** | 6 - 42 columns |
-| **Anomaly Ratio** | 0.38% - 33.29% |
+| Dataset Name | Datapoints | Columns | Normal Count | Anomaly Count | Anomaly Ratio (%) |
+| :--- | ---:| ---:| ---:| ---:| ---:|
+| automobile | 159 | 25 | 117 | 42 | 26.42 |
+| backdoor | 29,223 | 42 | 29,113 | 110 | 0.38 |
+| campaign | 7,842 | 16 | 6,056 | 1,786 | 22.77 |
+| cardiotocography | 2,126 | 21 | 1,655 | 471 | 22.15 |
+| census | 50,000 | 41 | 47,121 | 2,879 | 5.76 |
+| churn | 7,032 | 19 | 5,163 | 1,869 | 26.58 |
+| cirrhosis | 247 | 17 | 165 | 82 | 33.20 |
+| covertype | 50,000 | 12 | 49,520 | 480 | 0.96 |
+| credit | 30,000 | 23 | 23,364 | 6,636 | 22.12 |
+| equip | 7,672 | 6 | 6,905 | 767 | 10.00 |
+| gallstone | 241 | 38 | 161 | 80 | 33.20 |
+| glass | 214 | 9 | 163 | 51 | 23.83 |
+| glioma | 730 | 23 | 487 | 243 | 33.29 |
+| quasar | 50,000 | 8 | 40,520 | 9,480 | 18.96 |
+| seismic | 2,584 | 18 | 2,414 | 170 | 6.58 |
+| stroke | 4,909 | 10 | 4,700 | 209 | 4.26 |
+| vertebral | 310 | 6 | 210 | 100 | 32.26 |
+| wbc | 535 | 30 | 357 | 178 | 33.27 |
+| wine | 178 | 13 | 130 | 48 | 26.97 |
+| yeast | 1,484 | 8 | 1,389 | 95 | 6.40 |
 
 
 
