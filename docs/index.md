@@ -34,7 +34,7 @@ In tabular anomaly detection (AD), textual semantics often carry critical signal
 
 <div class="grid">
   <div class="card">
-    <h4>📚 Semantically-Rich Tabular AD Benchmark</h4>
+    <h4>📚 Semantically-Rich Datasets</h4>
     <p>Tabular data paired with comprehensive JSON text metadata containing column descriptions, logical types, and characterizations of normal data.</p>
   </div>
   <div class="card">
@@ -66,7 +66,7 @@ Traditional tabular AD benchmarks exhibit a **fundamental disconnect from indust
 
 ReTabAD includes **20 diverse datasets** spanning multiple domains:
 
-<div style="width: 80%; margin: 0 auto;">
+<div style="width: 80%; margin: 0 auto;" markdown="1">
 
 | Dataset Name | Datapoints | Columns | Normal Count | Anomaly Count | Anomaly Ratio (%) |
 | :--- | ---:| ---:| ---:| ---:| ---:|
