@@ -18,6 +18,22 @@ Existing tabular anomaly detection benchmarks exhibit a fundamental disconnect f
 * **💡 One Pipeline for Every Paradigm:** A unified pipeline that preserves semantic information, enabling fair comparisons across traditional ML, deep learning, and LLM-based detectors.
 * **🚀 LLMs as Zero-Shot Detectors:** With injected domain knowledge, LLMs improve average AUROC by **9.5%** (Gemini-2.5-Pro) over the same models on context-agnostic data that mimics traditional benchmarks.
 
+## 📢 Use ReTabAD in Your Research
+
+**Add your method.** We welcome new results on ReTabAD. Open an issue or pull request with your method's results, or contact us at [sanghyu.yoon@lgresearch.ai](mailto:sanghyu.yoon@lgresearch.ai).
+
+**Cite.** If you find ReTabAD useful, please cite:
+
+```bibtex
+@inproceedings{yoon2026retabad,
+  title     = {ReTabAD: A Benchmark for Restoring Semantic Context in Tabular Anomaly Detection},
+  author    = {Sanghyu Yoon and Dongmin Kim and Suhee Yoon and Ye Seul Sim and Seungdong Yoa and Hye-Seung Cho and Soonyoung Lee and Hankook Lee and Woohyung Lim},
+  booktitle = {The Fourteenth International Conference on Learning Representations},
+  year      = {2026},
+  url       = {https://openreview.net/forum?id=UFwgg44VZq}
+}
+```
+
 ## ⚙️ Installation
 
 ### 1. Clone the repository
@@ -134,21 +150,3 @@ ReTabAD includes **20 diverse datasets** spanning multiple domains:
 | wbc | 535 | 30 | 357 | 178 | 33.27 |
 | wine | 178 | 13 | 130 | 48 | 26.97 |
 | yeast | 1,484 | 8 | 1,389 | 95 | 6.40 |
-
-## 🏆 Add Your Method
-
-We welcome new results on ReTabAD. Open an issue or pull request with your method's results, or contact us at sanghyu.yoon@lgresearch.ai.
-
-## 📖 Citation
-
-If you find ReTabAD useful, please cite:
-
-```bibtex
-@inproceedings{yoon2026retabad,
-  title     = {ReTabAD: A Benchmark for Restoring Semantic Context in Tabular Anomaly Detection},
-  author    = {Yoon, Sanghyu and Kim, Dongmin and Yoon, Suhee and Sim, Ye Seul and Yoa, Seungdong and Cho, Hye-Seung and Lee, Soonyoung and Lee, Hankook and Lim, Woohyung},
-  booktitle = {International Conference on Learning Representations (ICLR)},
-  year      = {2026},
-  url       = {https://openreview.net/forum?id=UFwgg44VZq}
-}
-```
