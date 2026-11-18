@@ -1,88 +1,110 @@
-# 🤔 ReTabAD: A Benchmark for Restoring Semantic Context in Tabular Anomaly Detection
+# ReTabAD: A Benchmark for Restoring Semantic Context in Tabular Anomaly Detection
 
 *Official code and data repository of ReTabAD: LLM-based Tabular Anomaly Detection Benchmark [ICLR 2026]*
 
+[📄 Paper](https://arxiv.org/pdf/2510.02060) | [🌐 Project Page](https://yoonsanghyu.github.io/ReTabAD/) | [🤗 Dataset](https://huggingface.co/datasets/LGAI-DILab/ReTabAD)
 
-Existing tabular anomaly detection benchmarks exhibit a fundamental disconnect from industrial practice. They systematically strip away semantic context by converting textual features into opaque encodings and discarding descriptive metadata. This preprocessing rigidity limits research flexibility and prevents models from leveraging rich contextual information that domain experts routinely use.
+Existing tabular anomaly detection benchmarks exhibit a fundamental disconnect from industrial practice. They systematically strip away semantic context by converting textual features into opaque encodings and discarding descriptive metadata. This prevents models from using the rich contextual information that domain experts routinely rely on, and that large language models (LLMs) can reason over.
 
-`ReTabAD` is a novel benchmark created to address this gap. It enables context-aware research by **<u>Re</u>storing** textual semantics for **<u>Tab</u>ular** **<u>A</u>nomaly** **<u>D</u>etection**.
+`ReTabAD` closes this gap. It enables context-aware research by **<u>Re</u>storing** textual semantics for **<u>Tab</u>ular** **<u>A</u>nomaly** **<u>D</u>etection**.
 
 ## ✨ Key Features
 
-* **📚 Semantically-Rich Datasets:** Provides raw data paired with comprehensive JSON metadata containing column descriptions, logical types, and characterizations of normal data.
-* **💡 Preserved Semantic Information:** A unified pipeline that preserves semantic information, paving the way for fair comparisons across traditional ML, deep learning, and modern language model approaches.
-* **🚀 Demonstrating LLM Potential:** We showcase ReTabAD's capabilities by evaluating Large Language Models as zero-shot anomaly detectors with injected domain knowledge. Our results show a substantial average AUROC improvement of **9.5%** (Gemini-2.5-Pro) over models operating on context-agnostic data, which mimics traditional benchmarks.
+* **📚 Semantically-Rich Datasets:** 20 datasets of raw data paired with JSON metadata containing column descriptions, logical types, and characterizations of normal data.
+* **💡 One Pipeline for Every Paradigm:** A unified pipeline that preserves semantic information, enabling fair comparisons across traditional ML, deep learning, and LLM-based detectors.
+* **🚀 LLMs as Zero-Shot Detectors:** With injected domain knowledge, LLMs improve average AUROC by **9.5%** (Gemini-2.5-Pro) over the same models on context-agnostic data that mimics traditional benchmarks.
 
-## Prerequisites
+## ⚙️ Installation
 
-This project requires `Docker` and the `NVIDIA Container Toolkit` to be installed on your system.
+### 1. Clone the repository
 
-### ⚙️ Installation & Environment Setup
+```sh
+git clone https://github.com/yoonsanghyu/ReTabAD.git
+cd ReTabAD
+```
 
-1.  **Clone the Repository**
-    ```sh
-    git clone [https://github.com/yoonsanghyu/ReTabAD.git](https://github.com/yoonsanghyu/ReTabAD.git)
-    cd ReTabAD
-    ```
+### 2. Set up the environment
 
-2.  **Configure Data Directory**
-    Create a `.env` file in the project root and add the following line to specify your data directory:
-    ```bash
-    # .env
-    DATA_DIR=/path/to/your/data/dir
-    ```
+**Option A: pip**
 
-3.  **Build and Run the Docker Container**
-    ```sh
-    # Build the Docker image
-    docker build -t retabad:1.0.0 .
+<!-- TODO: requirements.txt가 있으면 아래 그대로, 없으면 만들어서 넣기 (pip 설치 경로가 있어야 처음 온 사람이 바로 써 봄) -->
+```sh
+pip install -r requirements.txt
+```
 
-    # Run the Docker container
-    docker run -itd --rm --name retabad --gpus '"device=4,5,6,7"' -m 375g -v /:/workspace retabad:1.0.0
-    ```
+**Option B: Docker** (requires `Docker` and the `NVIDIA Container Toolkit`)
 
-## 🚀 How to Run ?
+```sh
+docker build -t retabad:1.0.0 .
+docker run -it --rm --gpus all -v $(pwd):/workspace/ReTabAD retabad:1.0.0
+```
+<!-- TODO: 컨테이너 안의 실제 작업 경로에 맞게 -v 경로 확인 -->
 
-### 🧪 Quik Start: Run a Single Experiment
-To run a single experiment with a specific configuration, use:
+### 3. Download the data
+
+The dataset is hosted on [Hugging Face](https://huggingface.co/datasets/LGAI-DILab/ReTabAD). Accept the access conditions on the dataset page, then:
+
+```sh
+huggingface-cli login
+huggingface-cli download LGAI-DILab/ReTabAD --repo-type dataset --local-dir ./data
+```
+
+Each dataset is stored as `final_data/{dataset}/{dataset}.csv` (data) and `final_data/{dataset}/{dataset}.json` (semantic metadata).
+
+Then create a `.env` file in the project root:
+
+```bash
+# .env
+DATA_DIR=./data
+```
+<!-- TODO: 코드가 DATA_DIR 아래에서 final_data/를 찾는지, final_data 자체를 DATA_DIR로 기대하는지 확인 -->
+
+## 🚀 How to Run
+
+### 🧪 Quick Start: Run a Single Experiment
 
 ```sh
 python run_default.py --data_name <DATASET_NAME> --model_name <MODEL_NAME> --cfg_file <CONFIG_FILE.yaml> [--seed 42]
 ```
-- `<DATASET_NAME>`: Name of the dataset.
-- `<MODEL_NAME>`: Name of the model.
-- `<CONFIG_FILE.yaml>`: Path to the configuration YAML file.
-- `--seed`: (Optional) Random seed (default: 42).
 
-Example:
+- `<DATASET_NAME>`: one of the 20 datasets listed [below](#-benchmark-datasets).
+- `<MODEL_NAME>`: one of the supported models (see `configs/default/`).
+- `<CONFIG_FILE.yaml>`: path to the configuration YAML file.
+- `--seed`: (optional) random seed (default: 42).
+
+Classical detector:
 ```sh
 python run_default.py --data_name wine --model_name OCSVM --cfg_file configs/default/pyod/OCSVM.yaml --seed 42
 ```
 
+Zero-shot LLM detector with semantic context:
+<!-- TODO: 실제 LLM 모델 이름과 config 경로로 교체 (LLM 예시가 있어야 LLM 연구자가 바로 따라 해 봄) -->
+```sh
+python run_default.py --data_name wine --model_name LLM_MODEL_NAME --cfg_file configs/default/llm/LLM_CONFIG.yaml --seed 42
+```
+
 ### 📈 Hyperparameter Tuning
-To perform hyperparameter tuning using Optuna, run the following command:
+
+Hyperparameter search uses Optuna:
 
 ```sh
 python run_hpo.py --data_name <DATASET_NAME> --model_name <MODEL_NAME> --cfg_file <CONFIG_FILE.yaml> [--seeds 0 1 2 3 4]
 ```
-- `<DATASET_NAME>`: Name of the dataset (choose from the supported datasets).
-- `<MODEL_NAME>`: Name of the model (choose from the supported models).
-- `<CONFIG_FILE.yaml>`: Path to the configuration YAML file.
-- `--seeds`: (Optional) List of random seeds for repeated experiments (default: 0 1 2 3 4).
+
+- `--seeds`: (optional) random seeds for repeated runs (default: 0 1 2 3 4).
 
 Example:
 ```sh
 python run_hpo.py --data_name wine --model_name OCSVM --cfg_file configs/hpo/pyod/OCSVM.yaml --seeds 0 1 2 3 4
 ```
 
-**Monitor with Optuna Dashboard**
-If you want to monitor with optuna-dashboard, try:
+To monitor runs with Optuna Dashboard:
 ```sh
 mkdir exp_db
 optuna-dashboard sqlite:///exp_db/retab.sqlite3
 ```
 
-## 📊 ReTabAD Benchmark Datasets
+## 📊 Benchmark Datasets
 
 ReTabAD includes **20 diverse datasets** spanning multiple domains:
 
@@ -108,3 +130,21 @@ ReTabAD includes **20 diverse datasets** spanning multiple domains:
 | wbc | 535 | 30 | 357 | 178 | 33.27 |
 | wine | 178 | 13 | 130 | 48 | 26.97 |
 | yeast | 1,484 | 8 | 1,389 | 95 | 6.40 |
+
+## 🏆 Add Your Method
+
+We welcome new results on ReTabAD. Open an issue or pull request with your method's results, or contact us at sanghyu.yoon@lgresearch.ai.
+
+## 📖 Citation
+
+If you find ReTabAD useful, please cite:
+
+```bibtex
+@inproceedings{yoon2026retabad,
+  title     = {ReTabAD: A Benchmark for Restoring Semantic Context in Tabular Anomaly Detection},
+  author    = {Yoon, Sanghyu and Kim, Dongmin and Yoon, Suhee and Sim, Ye Seul and Yoa, Seungdong and Cho, Hye-Seung and Lee, Soonyoung and Lee, Hankook and Lim, Woohyung},
+  booktitle = {International Conference on Learning Representations (ICLR)},
+  year      = {2026},
+  url       = {https://openreview.net/forum?id=UFwgg44VZq}
+}
+```
