@@ -1,6 +1,6 @@
-# ReTabAD: A Benchmark for Restoring Semantic Context in Tabular Anomaly Detection
-
 <div align="center">
+
+# ReTabAD: A Benchmark for Restoring Semantic Context in Tabular Anomaly Detection
 
 *Official code and data repository of ReTabAD: LLM-based Tabular Anomaly Detection Benchmark [ICLR 2026]*
 
@@ -10,7 +10,7 @@
 
 Existing tabular anomaly detection benchmarks exhibit a fundamental disconnect from industrial practice. They systematically strip away semantic context by converting textual features into opaque encodings and discarding descriptive metadata. This prevents models from using the rich contextual information that domain experts routinely rely on, and that large language models (LLMs) can reason over.
 
-`ReTabAD` closes this gap. It enables context-aware research by **<u>Re</u>storing** textual semantics for **<u>Tab</u>ular** **<u>A</u>nomaly** **<u>D</u>etection**.
+`ReTabAD` closes this gap. It enables context-aware research by **<u>Re</u>storing** textual semantics for **<u>Tab</u>ular** **<u>A</u>nomaly** **<u>D</u>etection**. Alongside the benchmark, we introduce a zero-shot framework that uses LLMs as tabular anomaly detectors: the LLM reads each sample together with its semantic metadata and domain knowledge, then outputs an anomaly score along with its reasoning. Without any task-specific training, this framework shows that semantic context improves detection performance and makes results interpretable through domain-aware reasoning. We hope ReTabAD serves as a common testbed for researchers exploring LLMs for tabular anomaly detection.
 
 ## ✨ Key Features
 
@@ -31,7 +31,7 @@ cd ReTabAD
 
 **Option A: pip**
 
-<!-- TODO: requirements.txt가 있으면 아래 그대로, 없으면 만들어서 넣기 (pip 설치 경로가 있어야 처음 온 사람이 바로 써 봄) -->
+<!-- TODO: requirements.txt가 있는지 확인 (없으면 만들어서 추가) -->
 ```sh
 pip install -r requirements.txt
 ```
@@ -61,7 +61,7 @@ Then create a `.env` file in the project root:
 # .env
 DATA_DIR=./data
 ```
-<!-- TODO: 코드가 DATA_DIR 아래에서 final_data/를 찾는지, final_data 자체를 DATA_DIR로 기대하는지 확인 -->
+<!-- TODO: 코드가 DATA_DIR 아래에서 final_data/를 찾는지 확인 -->
 
 ## 🚀 How to Run
 
@@ -82,7 +82,7 @@ python run_default.py --data_name wine --model_name OCSVM --cfg_file configs/def
 ```
 
 Zero-shot LLM detector with semantic context:
-<!-- TODO: 실제 LLM 모델 이름과 config 경로로 교체 (LLM 예시가 있어야 LLM 연구자가 바로 따라 해 봄) -->
+<!-- TODO: 실제 LLM 모델 이름과 config 경로로 교체 -->
 ```sh
 python run_default.py --data_name wine --model_name LLM_MODEL_NAME --cfg_file configs/default/llm/LLM_CONFIG.yaml --seed 42
 ```
