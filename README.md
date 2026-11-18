@@ -1,8 +1,12 @@
 # ReTabAD: A Benchmark for Restoring Semantic Context in Tabular Anomaly Detection
 
+<div align="center">
+
 *Official code and data repository of ReTabAD: LLM-based Tabular Anomaly Detection Benchmark [ICLR 2026]*
 
 [📄 Paper](https://arxiv.org/pdf/2510.02060) | [🌐 Project Page](https://yoonsanghyu.github.io/ReTabAD/) | [🤗 Dataset](https://huggingface.co/datasets/LGAI-DILab/ReTabAD)
+
+</div>
 
 Existing tabular anomaly detection benchmarks exhibit a fundamental disconnect from industrial practice. They systematically strip away semantic context by converting textual features into opaque encodings and discarding descriptive metadata. This prevents models from using the rich contextual information that domain experts routinely rely on, and that large language models (LLMs) can reason over.
 
