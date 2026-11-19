@@ -16,6 +16,7 @@ Sanghyu Yoon, Dongmin Kim, Suhee Yoon, Ye Seul Sim, Seungdong Yoa, Hye-Seung Cho
 
 **Citation (BibTeX)**
 
+{% raw %}
 ```bibtex
 @inproceedings{yoon2026retabad,
   title     = {{ReTabAD}: A Benchmark for Restoring Semantic Context in Tabular Anomaly Detection},
@@ -25,3 +26,4 @@ Sanghyu Yoon, Dongmin Kim, Suhee Yoon, Ye Seul Sim, Seungdong Yoa, Hye-Seung Cho
   url       = {https://openreview.net/forum?id=UFwgg44VZq}
 }
 ```
+{% endraw %}

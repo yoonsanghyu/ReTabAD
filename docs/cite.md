@@ -8,6 +8,7 @@ permalink: /cite
 
 If you use this project, please cite:
 
+{% raw %}
 ```bibtex
 @inproceedings{yoon2026retabad,
   title     = {{ReTabAD}: A Benchmark for Restoring Semantic Context in Tabular Anomaly Detection},
@@ -17,3 +18,4 @@ If you use this project, please cite:
   url       = {https://openreview.net/forum?id=UFwgg44VZq}
 }
 ```
+{% endraw %}
