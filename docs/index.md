@@ -17,6 +17,7 @@ layout: default
       GitHub
     </a>
     <a href="https://huggingface.co/datasets/LGAI-DILab/ReTabAD">🗂 Dataset</a>
+    <a href="{{ site.baseurl }}/cite">📝 Cite</a>
   </div>
 </div>
 
@@ -114,6 +115,21 @@ python run_default.py --data_name wine --model_name OCSVM --cfg_file configs/def
 See [Usage]({{ site.baseurl }}/usage) for detailed instructions.
 
 
+## 📝 Citation
+
+If you find ReTabAD useful, please cite:
+
+{% raw %}
+```bibtex
+@inproceedings{yoon2026retabad,
+  title     = {{ReTabAD}: A Benchmark for Restoring Semantic Context in Tabular Anomaly Detection},
+  author    = {Sanghyu Yoon and Dongmin Kim and Suhee Yoon and Ye Seul Sim and Seungdong Yoa and Hye-Seung Cho and Soonyoung Lee and Hankook Lee and Woohyung Lim},
+  booktitle = {The Fourteenth International Conference on Learning Representations},
+  year      = {2026},
+  url       = {https://openreview.net/forum?id=UFwgg44VZq}
+}
+```
+{% endraw %}
 
 ## 📰 News
 
