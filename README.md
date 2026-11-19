@@ -4,7 +4,7 @@
 
 *Official code and data repository of ReTabAD: LLM-based Tabular Anomaly Detection Benchmark [ICLR 2026]*
 
-[📄 Paper](https://arxiv.org/pdf/2510.02060) | [🌐 Project Page](https://yoonsanghyu.github.io/ReTabAD/) | [🤗 Dataset](https://huggingface.co/datasets/LGAI-DILab/ReTabAD)
+[📄 Paper (PDF)](https://yoonsanghyu.github.io/ReTabAD/ReTabAD_ICLR2026.pdf) | [OpenReview](https://openreview.net/forum?id=UFwgg44VZq) | [arXiv](https://arxiv.org/abs/2510.02060) | [🌐 Project Page](https://yoonsanghyu.github.io/ReTabAD/) | [🤗 Dataset](https://huggingface.co/datasets/LGAI-DILab/ReTabAD)
 
 </div>
 

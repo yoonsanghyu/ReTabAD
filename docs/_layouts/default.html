@@ -4,6 +4,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  {% if page.url == "/" or page.url == "/paper" %}
+  <meta name="citation_title" content="ReTabAD: A Benchmark for Restoring Semantic Context in Tabular Anomaly Detection">
+  <meta name="citation_author" content="Yoon, Sanghyu">
+  <meta name="citation_author" content="Kim, Dongmin">
+  <meta name="citation_author" content="Yoon, Suhee">
+  <meta name="citation_author" content="Sim, Ye Seul">
+  <meta name="citation_author" content="Yoa, Seungdong">
+  <meta name="citation_author" content="Cho, Hye-Seung">
+  <meta name="citation_author" content="Lee, Soonyoung">
+  <meta name="citation_author" content="Lee, Hankook">
+  <meta name="citation_author" content="Lim, Woohyung">
+  <meta name="citation_publication_date" content="2026">
+  <meta name="citation_conference_title" content="The Fourteenth International Conference on Learning Representations">
+  <meta name="citation_pdf_url" content="https://yoonsanghyu.github.io/ReTabAD/ReTabAD_ICLR2026.pdf">
+  {% endif %}
   <title>{{ page.title }} | {{ site.title }}</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🤔</text></svg>">
   <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/custom.css">
